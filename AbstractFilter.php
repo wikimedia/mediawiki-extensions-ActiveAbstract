@@ -46,8 +46,8 @@ class AbstractFilter {
 		$this->title = Title::makeTitle( $page->page_namespace, $page->page_title );
 		
 		$xml = "<doc>\n";
-		$xml .= wfElement( 'url', null, $this->title->getFullUrl() ) . "\n";
 		$xml .= wfElement( 'title', null, $wgSitename . ': ' . $this->title->getPrefixedText() ) . "\n";
+		$xml .= wfElement( 'url', null, $this->title->getFullUrl() ) . "\n";
 		
 		// add abstract and links when we have revision data...
 		$this->revision = null;
@@ -60,9 +60,18 @@ class AbstractFilter {
 		if( $this->revision ) {
 			$xml .= wfElement( 'abstract', null, $this->_abstract( $this->revision ) ) . "\n";
 			$xml .= "<links>\n";
-			foreach( $this->_links( $this->revision ) as $url ) {
-				$xml .= wfElement( 'link', null, $url ) . "\n";
+			
+			$links = $this->_sectionLinks( $this->revision );
+			if( empty( $links ) ) {
+				// If no TOC, they want us to fall back to categories.
+				$links = $this->_categoryLinks( $this->revision );
 			}
+			foreach( $links as $anchor => $url ) {
+				$xml .= $this->_formatLink( $url, $anchor, 'nav' );
+			}
+			
+			// @todo: image links
+			
 			$xml .= "</links>\n";
 		}
 		$xml .= "</doc>\n";
@@ -138,12 +147,14 @@ class AbstractFilter {
 	
 	/**
 	 * Extract a list of TOC links
-	 * @params object $rev Database rows with revision data
-	 * @return array of URL strings
+	 * @param object $rev Database rows with revision data
+	 * @return array of URL strings, indexed by name/title
 	 * @access private
-	 * @fixme extract TOC items
+	 *
+	 * @fixme extract TOC items properly
+	 * @fixme check for explicit __NOTOC__
 	 */
-	function _links( $rev ) {
+	function _sectionLinks( $rev ) {
 		$text = Revision::getRevisionText( $rev );
 		$secs =
 		  preg_split(
@@ -156,10 +167,55 @@ class AbstractFilter {
 			$header = preg_replace( '/^=+\s*(.*?)\s*=+/', '$1', $secs[$i] );
 			$anchor = EditPage::sectionAnchor( $header );
 			$url = $this->title->getFullUrl() . $anchor;
-			$headers[] = $url;
+			$headers[$header] = $url;
 		}
 		return $headers;
 	}
+	
+	/**
+	 * Fetch the list of category links for this page
+	 * @param object $rev Database rows with revision data
+	 * @return array of URL strings, indexed by category name
+	 * @access private
+	 */
+	function _categoryLinks( $rev ) {
+		$id = $rev->page_id;
+		$dbr =& wfGetDB( DB_SLAVE );
+		$result = $dbr->select( 'categorylinks',
+			array( 'cl_to' ),
+			array( 'cl_from' => $id ),
+			'AbstractFilter::_categoryLinks' );
+		
+		$links = array();
+		while( $row = $dbr->fetchObject( $result ) ) {
+			$category = Title::makeTitle( NS_CATEGORY, $row->cl_to );
+			$links[$category->getText()] = $category->getFullUrl();
+		}
+		$dbr->freeResult( $result );
+		
+		return $links;
+	}
+	
+	/**
+	 * Format a <sublink> element, like so:
+	 * <sublink linktype="nav">
+	 *    <anchor>1939 Births</anchor>
+	 *    <link>http://en.wikipedia.org/wiki/Category:1939_births</link>
+	 * </sublink>
+	 *
+	 * @param string $url
+	 * @param string $anchor Human-readable link text; eg title or fragment
+	 * @param string $linktype "nav" or "image"
+	 * @return string XML fragment
+	 * @access private
+	 */
+	function _formatLink( $url, $anchor, $type ) {
+		return wfOpenElement( 'sublink', array( 'linktype' => $type ) ) .
+			wfElement( 'anchor', null, $anchor ) .
+			wfElement( 'link', null, $url ) .
+			wfCloseElement( 'sublink' ) . "\n";
+	}
+	
 }
 
 class NoredirectFilter extends DumpFilter {
