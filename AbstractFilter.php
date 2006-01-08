@@ -107,6 +107,11 @@ class AbstractFilter {
 	 * @access private
 	 */
 	function _stripMarkup( $text ) {
+		global $wgContLang;
+		
+		$text = substr( $text, 0, 4096 ); // don't bother with long text...
+		
+		$image = preg_quote( $wgContLang->getNsText( NS_IMAGE ), '#' );
 		$text = str_replace( "'''", "", $text );
 		$text = str_replace( "''", "", $text );
 		$text = preg_replace( '#<!--.*?-->#s', '', $text ); // HTML-style comments
@@ -114,7 +119,20 @@ class AbstractFilter {
 		$text = preg_replace( '#\\[[a-z]+:.*? (.*?)\\]#s', '$1', $text ); // URL links
 		$text = preg_replace( '#\\{\\{\\{.*?\\}\\}\\}#s', '', $text ); // template parameters
 		$text = preg_replace( '#\\{\\{.*?\\}\\}#s', '', $text ); // template calls
+		$text = preg_replace( '#\\{\\|.*?\\|\\}#s', '', $text ); // tables
+		$text = preg_replace( "#
+			\\[\\[
+				:?$image\\s*:
+					(
+						[^][]*
+						\[\[
+						[^][]*
+						\]\]
+					)*
+				[^][]*
+			\\]\\]#six", '', $text ); // images
 		$text = preg_replace( '#\\[\\[([^|\\]]*\\|)?(.*?)\\]\\]#s', '$2', $text ); // links
+		$text = preg_replace( '#^:.*$#m', '', $text ); // indented lines near start are usually disambigs or notices
 		$text = Sanitizer::decodeCharReferences( $text );
 		return trim( $text );
 	}
@@ -136,12 +154,14 @@ class AbstractFilter {
 		$endgroup = implode( '', array_map( 'preg_quote', $endchars ) );
 		$end = "[$endgroup]";
 		$sentence = ".*?$end+";
-		$firsttwo = "/^($sentence$sentence)/";
+		$firsttwo = "/^($sentence$sentence)/u";
 		
 		if( preg_match( $firsttwo, $text, $matches ) ) {
 			return $matches[1];
 		} else {
-			return $text;
+			// Just return the first line
+			$lines = explode( "\n", $text );
+			return trim( $lines[0] );
 		}
 	}
 	
