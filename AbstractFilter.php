@@ -97,7 +97,7 @@ class AbstractFilter {
 		$stripped = $this->_stripMarkup( $text );
 		$extract = $this->_extractStart( $stripped );
 		
-		return substr( $extract, 0, 1024 ); // not too long pls
+		return UtfNormal::cleanUp( substr( $extract, 0, 1024 ) ); // not too long pls
 	}
 	
 	/**
@@ -164,7 +164,7 @@ class AbstractFilter {
 		
 		$headers = array();
 		for( $i = 1; $i < count( $secs ); $i += 2 ) {
-			$header = preg_replace( '/^=+\s*(.*?)\s*=+/', '$1', $secs[$i] );
+			$header = UtfNormal::cleanUp( preg_replace( '/^=+\s*(.*?)\s*=+/', '$1', $secs[$i] ) );
 			$anchor = EditPage::sectionAnchor( $header );
 			$url = $this->title->getFullUrl() . $anchor;
 			$headers[$header] = $url;
