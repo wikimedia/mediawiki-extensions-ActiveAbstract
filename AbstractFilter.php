@@ -184,7 +184,9 @@ class AbstractFilter {
 		
 		$headers = array();
 		for( $i = 1; $i < count( $secs ); $i += 2 ) {
-			$header = UtfNormal::cleanUp( preg_replace( '/^=+\s*(.*?)\s*=+/', '$1', $secs[$i] ) );
+			$inside = preg_replace( '/^=+\s*(.*?)\s*=+/', '$1', $secs[$i] );
+			$stripped = $this->_stripMarkup( $inside ); // strip internal markup and <h[1-6]>
+			$header = UtfNormal::cleanUp( $stripped );
 			$anchor = EditPage::sectionAnchor( $header );
 			$url = $this->title->getFullUrl() . $anchor;
 			$headers[$header] = $url;
@@ -230,9 +232,10 @@ class AbstractFilter {
 	 * @access private
 	 */
 	function _formatLink( $url, $anchor, $type ) {
+		$maxUrlLength = 1024; // as defined in Yahoo's .xsd
 		return wfOpenElement( 'sublink', array( 'linktype' => $type ) ) .
 			wfElement( 'anchor', null, $anchor ) .
-			wfElement( 'link', null, $url ) .
+			wfElement( 'link', null, substr( $url, 0, $maxUrlLength ) ) .
 			wfCloseElement( 'sublink' ) . "\n";
 	}
 	
