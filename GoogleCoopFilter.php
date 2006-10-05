@@ -67,7 +67,7 @@ class GoogleCoopFilter extends AbstractFilter {
 		$this->title = Title::makeTitle( $page->page_namespace, $page->page_title );
 
 		$xml = "  <ResultSpec id=\"mw${n}\">\n";
-		$xml .= '    ' . wfElement( 'Query', null, $page->page_title ) . "\n";
+		$xml .= '    ' . wfElement( 'Query', null, $this->title->getPrefixedText() ) . "\n";
 		$xml .= "    <Response>\n";
 		$xml .= '      ' . wfElement( 'Output', array( 'name' => 'title' ),
 				$wgSitename . ':' . $this->title->getPrefixedText() ) . "\n";
