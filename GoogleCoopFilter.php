@@ -33,8 +33,7 @@ require_once('AbstractFilter.php');
  *
  * @author Brion Vibber <brion@pobox.com>
  * @author Jens Frank < JeLuF (at) mormo org >
- * @package MediaWiki
- * @subpackage maintenance
+ * @addtogroup maintenance
  *
  */
 class GoogleCoopFilter extends AbstractFilter {
