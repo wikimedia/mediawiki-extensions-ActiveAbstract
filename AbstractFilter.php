@@ -11,6 +11,9 @@
  *     --filter=namespace:NS_MAIN \
  *     --filter=noredirect \
  *     --filter=abstract
+ *
+ * Can optionally convert output text to a given language variant:
+ *   --filter=abstract:variant=zh-cn
  */
 
 require_once 'includes/EditPage.php'; // hack; for section anchor code
@@ -29,8 +32,15 @@ class AbstractFilter {
 		$dumper->registerFilter( 'noredirect', 'NoredirectFilter' );
 	}
 	
-	function AbstractFilter( &$sink ) {
+	function AbstractFilter( &$sink, $params='' ) {
 		$this->sink =& $sink;
+		
+		$bits = explode( '=', $params, 2 );
+		if( count( $bits ) == 2 && $bits[0] == 'variant' ) {
+			$this->variant = $bits[1];
+		} else {
+			$this->variant = false;
+		}
 	}
 	
 	function writeOpenStream( $string ) {
@@ -44,9 +54,10 @@ class AbstractFilter {
 	function writeOpenPage( $page, $string ) {
 		global $wgSitename;
 		$this->title = Title::makeTitle( $page->page_namespace, $page->page_title );
+		$title = $wgSitename . ': ' . $this->title->getPrefixedText();
 		
 		$xml = "<doc>\n";
-		$xml .= wfElement( 'title', null, $wgSitename . ': ' . $this->title->getPrefixedText() ) . "\n";
+		$xml .= wfElement( 'title', null, $this->_variant( $title ) ) . "\n";
 		$xml .= wfElement( 'url', null, $this->title->getFullUrl() ) . "\n";
 		
 		// add abstract and links when we have revision data...
@@ -58,7 +69,9 @@ class AbstractFilter {
 	function writeClosePage( $string ) {
 		$xml = '';
 		if( $this->revision ) {
-			$xml .= wfElement( 'abstract', null, $this->_abstract( $this->revision ) ) . "\n";
+			$xml .= wfElement( 'abstract', null,
+				$this->_variant(
+					$this->_abstract( $this->revision ) ) ) . "\n";
 			$xml .= "<links>\n";
 			
 			$links = $this->_sectionLinks( $this->revision );
@@ -96,8 +109,24 @@ class AbstractFilter {
 		
 		$stripped = $this->_stripMarkup( $text );
 		$extract = $this->_extractStart( $stripped );
+		$clipped = substr( $extract, 0, 1024 ); // not too long pls
 		
-		return UtfNormal::cleanUp( substr( $extract, 0, 1024 ) ); // not too long pls
+		return UtfNormal::cleanUp( $clipped );
+	}
+	
+	/**
+	 * Convert text to the preferred output language variant, if set.
+	 * @param string $text
+	 * @return string
+	 * @access private
+	 */
+	function _variant( $text ) {
+		if( $this->variant ) {
+			global $wgContLang;
+			return $wgContLang->mConverter->translate( $text, $this->variant );
+		} else {
+			return $text;
+		}
 	}
 	
 	/**
@@ -234,7 +263,7 @@ class AbstractFilter {
 	function _formatLink( $url, $anchor, $type ) {
 		$maxUrlLength = 1024; // as defined in Yahoo's .xsd
 		return wfOpenElement( 'sublink', array( 'linktype' => $type ) ) .
-			wfElement( 'anchor', null, $anchor ) .
+			wfElement( 'anchor', null, $this->_variant( $anchor ) ) .
 			wfElement( 'link', null, substr( $url, 0, $maxUrlLength ) ) .
 			wfCloseElement( 'sublink' ) . "\n";
 	}
