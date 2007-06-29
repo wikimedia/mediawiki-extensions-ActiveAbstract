@@ -276,4 +276,3 @@ class NoredirectFilter extends DumpFilter {
 	}
 }
 
-?>

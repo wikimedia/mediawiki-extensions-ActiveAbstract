@@ -155,4 +155,4 @@ class GoogleCoopFilter extends AbstractFilter {
 	}
 
 }
-?>
+
