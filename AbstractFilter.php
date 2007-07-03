@@ -16,8 +16,6 @@
  *   --filter=abstract:variant=zh-cn
  */
 
-require_once 'includes/EditPage.php'; // hack; for section anchor code
-
 /**
  * Tosses away the MediaWiki XML and generates new output
  */
