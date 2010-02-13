@@ -228,7 +228,7 @@ class AbstractFilter {
 	 */
 	function _categoryLinks( $rev ) {
 		$id = $rev->page_id;
-		$dbr =& wfGetDB( DB_SLAVE );
+		$dbr = wfGetDB( DB_SLAVE );
 		$result = $dbr->select( 'categorylinks',
 			array( 'cl_to' ),
 			array( 'cl_from' => $id ),
