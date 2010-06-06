@@ -30,9 +30,10 @@ require_once( 'AbstractFilter.php' );
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  * http://www.gnu.org/copyleft/gpl.html
  *
+ * @file
  * @author Brion Vibber <brion@pobox.com>
  * @author Jens Frank < JeLuF (at) mormo org >
- * @addtogroup maintenance
+ * @ingroup Maintenance
  *
  */
 
