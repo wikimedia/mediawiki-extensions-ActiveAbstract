@@ -29,7 +29,7 @@ class AbstractFilter {
 		$dumper->registerFilter( 'noredirect', 'NoredirectFilter' );
 	}
 
-	function AbstractFilter( &$sink, $params = '' ) {
+	function __construct( &$sink, $params = '' ) {
 		$this->sink =& $sink;
 
 		$bits = explode( '=', $params, 2 );

@@ -48,7 +48,7 @@ class GoogleCoopFilter extends AbstractFilter {
 		parent::register( $dumper );
 	}
 
-	function GoogleCoopFilter( &$sink ) {
+	function __construct( &$sink ) {
 		$this->sink =& $sink;
 	}
 
