@@ -232,7 +232,7 @@ class AbstractFilter {
 		$result = $dbr->select( 'categorylinks',
 			array( 'cl_to' ),
 			array( 'cl_from' => $id ),
-			'AbstractFilter::_categoryLinks' );
+			__METHOD__ );
 
 		$links = array();
 		while ( $row = $dbr->fetchObject( $result ) ) {
