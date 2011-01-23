@@ -182,6 +182,8 @@ class AbstractFilter {
 		$sentence = ".*?$end+";
 		$firsttwo = "/^($sentence$sentence)/u";
 
+		$matches = array();
+
 		if ( preg_match( $firsttwo, $text, $matches ) ) {
 			return $matches[1];
 		} else {
