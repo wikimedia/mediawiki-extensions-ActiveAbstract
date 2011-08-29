@@ -72,7 +72,7 @@ class GoogleCoopFilter extends AbstractFilter {
 		$xml .= '      ' . Xml::element( 'Output', array( 'name' => 'title' ),
 				$wgSitename . ':' . $this->title->getPrefixedText() ) . "\n";
 		$xml .= '      ' . Xml::element( 'Output', array( 'name' => 'more_url' ),
-				$this->title->getFullUrl() ) . "\n";
+				$this->title->getCanonicalUrl() ) . "\n";
 
 		// add abstract and links when we have revision data...
 		$this->revision = null;

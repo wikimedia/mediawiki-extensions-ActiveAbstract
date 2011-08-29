@@ -55,7 +55,7 @@ class AbstractFilter {
 
 		$xml = "<doc>\n";
 		$xml .= Xml::element( 'title', null, $this->_variant( $title ) ) . "\n";
-		$xml .= Xml::element( 'url', null, $this->title->getFullUrl() ) . "\n";
+		$xml .= Xml::element( 'url', null, $this->title->getCanonicalUrl() ) . "\n";
 
 		// add abstract and links when we have revision data...
 		$this->revision = null;
@@ -216,7 +216,7 @@ class AbstractFilter {
 			$stripped = $this->_stripMarkup( $inside ); // strip internal markup and <h[1-6]>
 			$header = UtfNormal::cleanUp( $stripped );
 			$anchor = EditPage::sectionAnchor( $header );
-			$url = $this->title->getFullUrl() . $anchor;
+			$url = $this->title->getCanonicalUrl() . $anchor;
 			$headers[$header] = $url;
 		}
 		return $headers;
@@ -239,7 +239,7 @@ class AbstractFilter {
 		$links = array();
 		while ( $row = $dbr->fetchObject( $result ) ) {
 			$category = Title::makeTitle( NS_CATEGORY, $row->cl_to );
-			$links[$category->getText()] = $category->getFullUrl();
+			$links[$category->getText()] = $category->getCanonicalUrl();
 		}
 		$dbr->freeResult( $result );
 
