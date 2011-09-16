@@ -22,7 +22,6 @@ class AbstractFilter {
 	/**
 	 * Register the filter function with the dump manager
 	 * @param BackupDumper $dumper
-	 * @static
 	 */
 	function register( &$dumper ) {
 		$dumper->registerFilter( 'abstract', 'AbstractFilter' );
@@ -237,11 +236,10 @@ class AbstractFilter {
 			__METHOD__ );
 
 		$links = array();
-		while ( $row = $dbr->fetchObject( $result ) ) {
+		foreach( $result as $row ) {
 			$category = Title::makeTitle( NS_CATEGORY, $row->cl_to );
 			$links[$category->getText()] = $category->getCanonicalUrl();
 		}
-		$dbr->freeResult( $result );
 
 		return $links;
 	}
