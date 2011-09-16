@@ -48,6 +48,9 @@ class GoogleCoopFilter extends AbstractFilter {
 		parent::register( $dumper );
 	}
 
+	/**
+	 * @param $sink ExportProgressFilter
+	 */
 	function __construct( &$sink ) {
 		$this->sink =& $sink;
 	}
@@ -115,6 +118,9 @@ class GoogleCoopFilter extends AbstractFilter {
 	 *
 	 * This code needs a cleanup, it became rather ugly after adding exception
 	 * handling :-(
+	 *
+	 * @param $str
+	 * @return array|string
 	 */
 	function _threeLines( $str ) {
 		$s = array();

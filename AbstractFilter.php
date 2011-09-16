@@ -28,6 +28,10 @@ class AbstractFilter {
 		$dumper->registerFilter( 'noredirect', 'NoredirectFilter' );
 	}
 
+	/**
+	 * @param $sink ExportProgressFilter
+	 * @param $params string
+	 */
 	function __construct( &$sink, $params = '' ) {
 		$this->sink =& $sink;
 
@@ -98,7 +102,6 @@ class AbstractFilter {
 	 * Extract an abstract from the page
 	 * @params object $rev Database rows with revision data
 	 * @return string
-	 * @access private
 	 */
 	function _abstract( $rev ) {
 		$text = Revision::getRevisionText( $rev ); // FIXME cache this
@@ -114,7 +117,6 @@ class AbstractFilter {
 	 * Convert text to the preferred output language variant, if set.
 	 * @param string $text
 	 * @return string
-	 * @access private
 	 */
 	function _variant( $text ) {
 		if ( $this->variant ) {
@@ -129,7 +131,6 @@ class AbstractFilter {
 	 * Strip markup to show plaintext
 	 * @param string $text
 	 * @return string
-	 * @access private
 	 */
 	function _stripMarkup( $text ) {
 		global $wgContLang;
@@ -166,7 +167,6 @@ class AbstractFilter {
 	 * Extract the first two sentences, if detectable, from the text.
 	 * @param string $text
 	 * @return string
-	 * @access private
 	 */
 	function _extractStart( $text ) {
 		$endchars = array(
@@ -196,7 +196,6 @@ class AbstractFilter {
 	 * Extract a list of TOC links
 	 * @param object $rev Database rows with revision data
 	 * @return array of URL strings, indexed by name/title
-	 * @access private
 	 *
 	 * @fixme extract TOC items properly
 	 * @fixme check for explicit __NOTOC__
@@ -225,7 +224,6 @@ class AbstractFilter {
 	 * Fetch the list of category links for this page
 	 * @param object $rev Database rows with revision data
 	 * @return array of URL strings, indexed by category name
-	 * @access private
 	 */
 	function _categoryLinks( $rev ) {
 		$id = $rev->page_id;
@@ -253,9 +251,8 @@ class AbstractFilter {
 	 *
 	 * @param string $url
 	 * @param string $anchor Human-readable link text; eg title or fragment
-	 * @param string $linktype "nav" or "image"
+	 * @param string $type "nav" or "image"
 	 * @return string XML fragment
-	 * @access private
 	 */
 	function _formatLink( $url, $anchor, $type ) {
 		$maxUrlLength = 1024; // as defined in Yahoo's .xsd
@@ -267,6 +264,12 @@ class AbstractFilter {
 }
 
 class NoredirectFilter extends DumpFilter {
+
+	/**
+	 * @param $page
+	 * @param $string
+	 * @return bool
+	 */
 	function pass( $page, $string ) {
 		return !$page->page_is_redirect;
 	}
