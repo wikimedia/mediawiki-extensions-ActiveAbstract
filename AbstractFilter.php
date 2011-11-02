@@ -201,6 +201,8 @@ class AbstractFilter {
 	 * @fixme check for explicit __NOTOC__
 	 */
 	function _sectionLinks( $rev ) {
+		global $wgParser;
+
 		$text = Revision::getRevisionText( $rev );
 		$secs =
 		  preg_split(
@@ -213,7 +215,7 @@ class AbstractFilter {
 			$inside = preg_replace( '/^=+\s*(.*?)\s*=+/', '$1', $secs[$i] );
 			$stripped = $this->_stripMarkup( $inside ); // strip internal markup and <h[1-6]>
 			$header = UtfNormal::cleanUp( $stripped );
-			$anchor = EditPage::sectionAnchor( $header );
+			$anchor = $wgParser->guessSectionNameFromWikiText( $header );
 			$url = $this->title->getCanonicalUrl() . $anchor;
 			$headers[$header] = $url;
 		}
