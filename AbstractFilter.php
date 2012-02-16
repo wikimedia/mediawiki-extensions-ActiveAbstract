@@ -269,10 +269,9 @@ class NoredirectFilter extends DumpFilter {
 
 	/**
 	 * @param $page
-	 * @param $string
 	 * @return bool
 	 */
-	function pass( $page, $string ) {
+	function pass( $page ) {
 		return !$page->page_is_redirect;
 	}
 }
