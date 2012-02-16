@@ -43,7 +43,7 @@ class GoogleCoopFilter extends AbstractFilter {
  	* @param BackupDumper $dumper
  	* @static
  	*/
-	function register( &$dumper ) {
+	static function register( &$dumper ) {
 		$dumper->registerFilter( 'googlecoop', 'GoogleCoopFilter' );
 		parent::register( $dumper );
 	}

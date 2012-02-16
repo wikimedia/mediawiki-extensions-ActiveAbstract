@@ -23,7 +23,7 @@ class AbstractFilter {
 	 * Register the filter function with the dump manager
 	 * @param BackupDumper $dumper
 	 */
-	function register( &$dumper ) {
+	static function register( &$dumper ) {
 		$dumper->registerFilter( 'abstract', 'AbstractFilter' );
 		$dumper->registerFilter( 'noredirect', 'NoredirectFilter' );
 	}
