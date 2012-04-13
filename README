@@ -1,1 +1,10 @@
 This "extension" is a plugin for dumpBackup
+
+Complete online documenation:
+http://www.mediawiki.org/wiki/Extension:ActiveAbstract
+
+== Setup ==
+* Add the following line to 'LocalSettings.php':
+    require_once("$IP/extensions/ActiveAbstract/ActiveAbstract.php");
+  (while this is not strictly required, it makes the extension's tests
+  visible when running PHPUnit in the MediaWiki directory)
