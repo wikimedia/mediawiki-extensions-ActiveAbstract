@@ -1,7 +1,5 @@
 <?php
-require_once( dirname( __FILE__ ) . "/../AbstractFilter.php" );
-
-
+require_once( __DIR__ . "/../AbstractFilter.php" );
 
 /**
  * An Stub implementation taking return values from an array while removing
@@ -351,7 +349,5 @@ class AbstractFilterTest extends DumpTestCase {
 
 		$af = new AbstractFilter( $sinkMock );
 		$af->writeRevision( "foo", "bar" );
-
 	}
-
 }

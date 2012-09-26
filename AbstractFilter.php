@@ -54,7 +54,7 @@ class AbstractFilter {
 	function writeOpenPage( $page, $string ) {
 		global $wgSitename;
 		$this->title = Title::makeTitle( $page->page_namespace, $page->page_title );
-		$title = $wgSitename . wfMsg( 'colon-separator' ) . $this->title->getPrefixedText();
+		$title = $wgSitename . wfMessage( 'colon-separator' )->text() . $this->title->getPrefixedText();
 
 		$xml = "<doc>\n";
 		$xml .= Xml::element( 'title', null, $this->_variant( $title ) ) . "\n";
@@ -100,7 +100,7 @@ class AbstractFilter {
 
 	/**
 	 * Extract an abstract from the page
-	 * @params object $rev Database rows with revision data
+	 * @param object $rev Database rows with revision data
 	 * @return string
 	 */
 	function _abstract( $rev ) {
@@ -197,8 +197,8 @@ class AbstractFilter {
 	 * @param object $rev Database rows with revision data
 	 * @return array of URL strings, indexed by name/title
 	 *
-	 * @fixme extract TOC items properly
-	 * @fixme check for explicit __NOTOC__
+	 * @todo FIXME extract TOC items properly
+	 * @todo FIXME check for explicit __NOTOC__
 	 */
 	function _sectionLinks( $rev ) {
 		global $wgParser;
@@ -266,7 +266,6 @@ class AbstractFilter {
 }
 
 class NoredirectFilter extends DumpFilter {
-
 	/**
 	 * @param $page
 	 * @return bool

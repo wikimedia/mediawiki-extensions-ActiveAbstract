@@ -1,7 +1,5 @@
 <?php
-require_once( dirname( __FILE__ ) . "/../AbstractFilter.php" );
-
-
+require_once( __DIR__ . "/../AbstractFilter.php" );
 
 /**
  * Tests for BackupDumper producing abstract dumps using Abstractfilter
@@ -14,7 +12,6 @@ require_once( dirname( __FILE__ ) . "/../AbstractFilter.php" );
  * @group Dump
  */
 class BackupDumperAbstractsTest extends DumpTestCase {
-
 	// We'll add several pages, revision and texts. The following variables hold the
 	// corresponding ids.
 	private $pageId1, $pageId2, $pageId3, $pageId4, $pageId5, $pageId6, $pageId7;
@@ -236,7 +233,6 @@ Link to Page7 as Category [[Category:BackupDumperAbstractsTestPage7]].
 	 *             is interpreted as name of a subsection within the current doc.
 	 */
 	private function assertLink( $name, $is_category = false ) {
-		global $wgContLang;
 		$this->assertNodeStart( "sublink" );
 		$this->skipWhitespace();
 
