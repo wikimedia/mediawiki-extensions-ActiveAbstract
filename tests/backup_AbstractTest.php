@@ -311,7 +311,7 @@ Link to Page7 as Category [[Category:BackupDumperAbstractsTestPage7]].
 		// but this would no longer represent xmldumps-backups use case.
 		//
 		// Long story short: When using temporary tables, we have to skip the test :(
-		if ( $this->useTemporaryTables ) {
+		if ( $this->usesTemporaryTables() ) {
 			$this->markTestSkipped( "This test grabs new database connections at "
 				. "several times. Run the test suite with --use-normal-tables "
 				. "to not skip this test" );
