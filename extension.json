@@ -1,0 +1,18 @@
+{
+	"name": "ActiveAbstract",
+	"author": [
+		"Brion Vibber"
+	],
+	"url": "https://www.mediawiki.org/wiki/Extension:ActiveAbstract",
+	"description": "Generate XML feed for Yahoo's Active Abstracts project",
+	"license-name": "GPL-2.0+",
+	"type": "other",
+	"Hooks": {
+		"UnitTestsList": [
+			"ActiveAbstractTestHooks::getUnitTests"
+		]
+	},
+	"AutoloadClasses": {
+		"ActiveAbstractTestHooks": "tests/ActiveAbstractTest.hooks.php"
+	}
+}
