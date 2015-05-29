@@ -14,5 +14,6 @@
 	},
 	"AutoloadClasses": {
 		"ActiveAbstractTestHooks": "tests/ActiveAbstractTest.hooks.php"
-	}
+	},
+	"manifest_version": 1
 }
