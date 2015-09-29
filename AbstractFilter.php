@@ -20,15 +20,6 @@
  */
 class AbstractFilter {
 	/**
-	 * Register the filter function with the dump manager
-	 * @param BackupDumper $dumper
-	 */
-	static function register( &$dumper ) {
-		$dumper->registerFilter( 'abstract', 'AbstractFilter' );
-		$dumper->registerFilter( 'noredirect', 'NoredirectFilter' );
-	}
-
-	/**
 	 * @param $sink ExportProgressFilter
 	 * @param $params string
 	 */
@@ -41,6 +32,15 @@ class AbstractFilter {
 		} else {
 			$this->variant = false;
 		}
+	}
+
+	/**
+	 * Register the filter function with the dump manager
+	 * @param BackupDumper $dumper
+	 */
+	static function register( &$dumper ) {
+		$dumper->registerFilter( 'abstract', 'AbstractFilter' );
+		$dumper->registerFilter( 'noredirect', 'NoredirectFilter' );
 	}
 
 	function writeOpenStream( $string ) {
@@ -57,7 +57,7 @@ class AbstractFilter {
 		$title = $wgSitename . wfMessage( 'colon-separator' )->text() . $this->title->getPrefixedText();
 
 		$xml = "<doc>\n";
-		$xml .= Xml::element( 'title', null, $this->_variant( $title ) ) . "\n";
+		$xml .= Xml::element( 'title', null, $this->variant( $title ) ) . "\n";
 		$xml .= Xml::element( 'url', null, $this->title->getCanonicalUrl() ) . "\n";
 
 		// add abstract and links when we have revision data...
@@ -66,21 +66,36 @@ class AbstractFilter {
 		$this->sink->writeOpenPage( $page, $xml );
 	}
 
+	/**
+	 * Convert text to the preferred output language variant, if set.
+	 * @param string $text
+	 * @return string
+	 */
+	function variant( $text ) {
+		if ( $this->variant ) {
+			global $wgContLang;
+
+			return $wgContLang->mConverter->translate( $text, $this->variant );
+		} else {
+			return $text;
+		}
+	}
+
 	function writeClosePage( $string ) {
 		$xml = '';
 		if ( $this->revision ) {
 			$xml .= Xml::element( 'abstract', null,
-				$this->_variant(
-					$this->_abstract( $this->revision ) ) ) . "\n";
+				$this->variant(
+					$this->extractAbstract( $this->revision ) ) ) . "\n";
 			$xml .= "<links>\n";
 
-			$links = $this->_sectionLinks( $this->revision );
+			$links = $this->sectionLinks( $this->revision );
 			if ( empty( $links ) ) {
 				// If no TOC, they want us to fall back to categories.
-				$links = $this->_categoryLinks( $this->revision );
+				$links = $this->categoryLinks( $this->revision );
 			}
 			foreach ( $links as $anchor => $url ) {
-				$xml .= $this->_formatLink( $url, $anchor, 'nav' );
+				$xml .= $this->formatLink( $url, $anchor, 'nav' );
 			}
 
 			// @todo: image links
@@ -93,38 +108,19 @@ class AbstractFilter {
 		$this->revision = null;
 	}
 
-	function writeRevision( $rev, $string ) {
-		// Only use one revision's worth of data to output
-		$this->revision = $rev;
-	}
-
 	/**
 	 * Extract an abstract from the page
 	 * @param object $rev Database rows with revision data
 	 * @return string
 	 */
-	function _abstract( $rev ) {
+	protected function extractAbstract( $rev ) {
 		$text = Revision::getRevisionText( $rev ); // FIXME cache this
 
-		$stripped = $this->_stripMarkup( $text );
-		$extract = $this->_extractStart( $stripped );
+		$stripped = $this->stripMarkup( $text );
+		$extract = $this->extractStart( $stripped );
 		$clipped = substr( $extract, 0, 1024 ); // not too long pls
 
 		return UtfNormal::cleanUp( $clipped );
-	}
-
-	/**
-	 * Convert text to the preferred output language variant, if set.
-	 * @param string $text
-	 * @return string
-	 */
-	function _variant( $text ) {
-		if ( $this->variant ) {
-			global $wgContLang;
-			return $wgContLang->mConverter->translate( $text, $this->variant );
-		} else {
-			return $text;
-		}
 	}
 
 	/**
@@ -132,7 +128,7 @@ class AbstractFilter {
 	 * @param string $text
 	 * @return string
 	 */
-	function _stripMarkup( $text ) {
+	protected function stripMarkup( $text ) {
 		global $wgContLang;
 
 		$text = substr( $text, 0, 4096 ); // don't bother with long text...
@@ -140,12 +136,19 @@ class AbstractFilter {
 		$image = preg_quote( $wgContLang->getNsText( NS_IMAGE ), '#' );
 		$text = str_replace( "'''", "", $text );
 		$text = str_replace( "''", "", $text );
-		$text = preg_replace( '#<!--.*?-->#s', '', $text ); // HTML-style comments
-		$text = preg_replace( '#</?[a-z0-9]+.*?>#s', '', $text ); // HTML-style tags
-		$text = preg_replace( '#\\[[a-z]+:.*? (.*?)\\]#s', '$1', $text ); // URL links
-		$text = preg_replace( '#\\{\\{\\{.*?\\}\\}\\}#s', '', $text ); // template parameters
-		$text = preg_replace( '#\\{\\{.*?\\}\\}#s', '', $text ); // template calls
-		$text = preg_replace( '#\\{\\|.*?\\|\\}#s', '', $text ); // tables
+		// HTML-style comments
+		$text = preg_replace( '#<!--.*?-->#s', '', $text );
+		// HTML-style tags
+		$text = preg_replace( '#</?[a-z0-9]+.*?>#s', '', $text );
+		// URL links
+		$text = preg_replace( '#\\[[a-z]+:.*? (.*?)\\]#s', '$1', $text );
+		// template parameters
+		$text = preg_replace( '#\\{\\{\\{.*?\\}\\}\\}#s', '', $text );
+		// template calls
+		$text = preg_replace( '#\\{\\{.*?\\}\\}#s', '', $text );
+		// tables
+		$text = preg_replace( '#\\{\\|.*?\\|\\}#s', '', $text );
+		// images
 		$text = preg_replace( "#
 			\\[\\[
 				:?$image\\s*:
@@ -156,10 +159,13 @@ class AbstractFilter {
 						\]\]
 					)*
 				[^][]*
-			\\]\\]#six", '', $text ); // images
-		$text = preg_replace( '#\\[\\[([^|\\]]*\\|)?(.*?)\\]\\]#s', '$2', $text ); // links
-		$text = preg_replace( '#^:.*$#m', '', $text ); // indented lines near start are usually disambigs or notices
+			\\]\\]#six", '', $text );
+		// links
+		$text = preg_replace( '#\\[\\[([^|\\]]*\\|)?(.*?)\\]\\]#s', '$2', $text );
+		// indented lines near start are usually disambigs or notices
+		$text = preg_replace( '#^:.*$#m', '', $text );
 		$text = Sanitizer::decodeCharReferences( $text );
+
 		return trim( $text );
 	}
 
@@ -168,13 +174,13 @@ class AbstractFilter {
 	 * @param string $text
 	 * @return string
 	 */
-	function _extractStart( $text ) {
+	function extractStart( $text ) {
 		$endchars = array(
 			'.', '!', '?', // regular ASCII
 			'。', // full-width ideographic full-stop
 			'．', '！', '？', // double-width roman forms
 			'｡', // half-width ideographic full stop
-			);
+		);
 
 		$endgroup = implode( '', array_map( 'preg_quote', $endchars ) );
 		$end = "[$endgroup]";
@@ -188,6 +194,7 @@ class AbstractFilter {
 		} else {
 			// Just return the first line
 			$lines = explode( "\n", $text );
+
 			return trim( $lines[0] );
 		}
 	}
@@ -200,25 +207,27 @@ class AbstractFilter {
 	 * @todo FIXME extract TOC items properly
 	 * @todo FIXME check for explicit __NOTOC__
 	 */
-	function _sectionLinks( $rev ) {
+	protected function sectionLinks( $rev ) {
 		global $wgParser;
 
 		$text = Revision::getRevisionText( $rev );
-		$secs =
-		  preg_split(
-		  '/(^=+.+?=+|^<h[1-6].*?' . '>.*?<\/h[1-6].*?' . '>)(?!\S)/mi',
-		  $text, - 1,
-		  PREG_SPLIT_DELIM_CAPTURE );
+		$secs = preg_split(
+			'/(^=+.+?=+|^<h[1-6].*?' . '>.*?<\/h[1-6].*?' . '>)(?!\S)/mi',
+			$text, -1,
+			PREG_SPLIT_DELIM_CAPTURE
+		);
 
 		$headers = array();
-		for ( $i = 1; $i < count( $secs ); $i += 2 ) {
+		$secsCount = count( $secs );
+		for ( $i = 1; $i < $secsCount; $i += 2 ) {
 			$inside = preg_replace( '/^=+\s*(.*?)\s*=+/', '$1', $secs[$i] );
-			$stripped = $this->_stripMarkup( $inside ); // strip internal markup and <h[1-6]>
+			$stripped = $this->stripMarkup( $inside ); // strip internal markup and <h[1-6]>
 			$header = UtfNormal::cleanUp( $stripped );
 			$anchor = $wgParser->guessSectionNameFromWikiText( $header );
 			$url = $this->title->getCanonicalUrl() . $anchor;
 			$headers[$header] = $url;
 		}
+
 		return $headers;
 	}
 
@@ -227,7 +236,7 @@ class AbstractFilter {
 	 * @param object $rev Database rows with revision data
 	 * @return array of URL strings, indexed by category name
 	 */
-	function _categoryLinks( $rev ) {
+	protected function categoryLinks( $rev ) {
 		$id = $rev->page_id;
 		$dbr = wfGetDB( DB_SLAVE );
 		$result = $dbr->select( 'categorylinks',
@@ -236,7 +245,7 @@ class AbstractFilter {
 			__METHOD__ );
 
 		$links = array();
-		foreach( $result as $row ) {
+		foreach ( $result as $row ) {
 			$category = Title::makeTitle( NS_CATEGORY, $row->cl_to );
 			$links[$category->getText()] = $category->getCanonicalUrl();
 		}
@@ -256,12 +265,17 @@ class AbstractFilter {
 	 * @param string $type "nav" or "image"
 	 * @return string XML fragment
 	 */
-	function _formatLink( $url, $anchor, $type ) {
+	protected function formatLink( $url, $anchor, $type ) {
 		$maxUrlLength = 1024; // as defined in Yahoo's .xsd
 		return Xml::openElement( 'sublink', array( 'linktype' => $type ) ) .
-			Xml::element( 'anchor', null, $this->_variant( $anchor ) ) .
+			Xml::element( 'anchor', null, $this->variant( $anchor ) ) .
 			Xml::element( 'link', null, substr( $url, 0, $maxUrlLength ) ) .
 			Xml::closeElement( 'sublink' ) . "\n";
+	}
+
+	function writeRevision( $rev, $string ) {
+		// Only use one revision's worth of data to output
+		$this->revision = $rev;
 	}
 }
 

@@ -1,5 +1,5 @@
 <?php
-require_once( __DIR__ . "/../AbstractFilter.php" );
+require_once __DIR__ . '/../AbstractFilter.php';
 
 /**
  * An Stub implementation taking return values from an array while removing
@@ -41,17 +41,14 @@ require_once( __DIR__ . "/../AbstractFilter.php" );
  * PHPUnit_Framework_MockObject_Stub_ReturnValueMap from PHPUnit_MockObject by
  * Sebastian Bergmann (under the 3-clause-BSD licence).
  */
-class DroppingReturnValueMap implements PHPUnit_Framework_MockObject_Stub
-{
+class DroppingReturnValueMap implements PHPUnit_Framework_MockObject_Stub {
 	protected $valueMap;
 
-	public function __construct( array $valueMap )
-	{
+	public function __construct( array $valueMap ) {
 		$this->valueMap = $valueMap;
 	}
 
-	public function invoke( PHPUnit_Framework_MockObject_Invocation $invocation )
-	{
+	public function invoke( PHPUnit_Framework_MockObject_Invocation $invocation ) {
 		$parameterCount = count( $invocation->parameters );
 
 		foreach ( $this->valueMap as $key => $map ) {
@@ -62,6 +59,7 @@ class DroppingReturnValueMap implements PHPUnit_Framework_MockObject_Stub
 			$return = array_pop( $map );
 			if ( $invocation->parameters === $map ) {
 				unset( $this->valueMap[$key] );
+
 				return $return;
 			}
 		}
@@ -88,13 +86,10 @@ class DroppingReturnValueMap implements PHPUnit_Framework_MockObject_Stub
 			. "does not (or no longer) hold an entry for the actual parameters $actual" );
 	}
 
-	public function toString()
-	{
+	public function toString() {
 		return 'dropping return value from a map';
 	}
 }
-
-
 
 /**
  * Unit tests for Abstractfilter
@@ -109,6 +104,21 @@ class DroppingReturnValueMap implements PHPUnit_Framework_MockObject_Stub
  */
 class AbstractFilterTest extends DumpTestCase {
 
+	function testRegister() {
+		$map = array(
+			array( 'abstract', 'AbstractFilter', null ),
+			array( 'noredirect', 'NoredirectFilter', null )
+		);
+
+		$dumperMock = $this->getMock( 'BackupDumper', array(), array(), '', false );
+
+		$dumperMock->expects( $this->exactly( count( $map ) ) )
+			->method( 'registerFilter' )
+			->will( $this->droppingReturnValueMap( $map ) );
+
+		AbstractFilter::register( $dumperMock );
+	}
+
 	/**
 	 * obtains a stub implementation that allows to map parameters to values
 	 * and retract the parameters after usage.
@@ -121,22 +131,6 @@ class AbstractFilterTest extends DumpTestCase {
 	 */
 	function droppingReturnValueMap( $valueMap ) {
 		return new DroppingReturnValueMap( $valueMap );
-	}
-
-	function testRegister() {
-		$map = array(
-			array( 'abstract', 'AbstractFilter', NULL ),
-			array( 'noredirect', 'NoredirectFilter', NULL )
-		);
-
-		$dumperMock = $this->getMock( 'BackupDumper', array(), array(), '', FALSE );
-
-		$dumperMock->expects( $this->exactly( count( $map ) ) )
-			->method( 'registerFilter' )
-			->will( $this->droppingReturnValueMap( $map ) );
-
-		AbstractFilter::register( $dumperMock );
-
 	}
 
 	function testWriteOpenStreamNull() {
@@ -317,7 +311,6 @@ class AbstractFilterTest extends DumpTestCase {
 
 		$af = new AbstractFilter( $sinkMock );
 		$af->writeCloseStream( "foo" );
-
 	}
 
 	function testWriteRevision() {

@@ -1,5 +1,5 @@
 <?php
-require_once( __DIR__ . "/../AbstractFilter.php" );
+require_once __DIR__ . '/../AbstractFilter.php';
 
 /**
  * Tests for BackupDumper producing abstract dumps using Abstractfilter
@@ -47,7 +47,7 @@ class BackupDumperAbstractsTest extends DumpTestCase {
 			list( $this->revId2_1, $this->textId2_1 ) = $this->addRevision( $page,
 				"BackupDumperAbstractsTestPage2Text1",
 				"BackupDumperAbstractsTestPage2Summary1" );
-			 list( $this->revId2_2, $this->textId2_2 ) = $this->addRevision( $page,
+			list( $this->revId2_2, $this->textId2_2 ) = $this->addRevision( $page,
 				"A short first paragraph.
 
 A second paragraph.
@@ -131,16 +131,12 @@ Link to Page7 as Category [[Category:BackupDumperAbstractsTestPage7]].
 ",
 				"BackupDumperAbstractsTestPage7Summary1" );
 			$this->pageId7 = $page->getId();
-
-
-
 		} catch ( Exception $e ) {
 			// We'd love to pass $e directly. However, ... see
 			// documentation of exceptionFromAddDBData in
 			// DumpTestCase
 			$this->exceptionFromAddDBData = $e;
 		}
-
 	}
 
 	function setUp() {
@@ -156,107 +152,18 @@ Link to Page7 as Category [[Category:BackupDumperAbstractsTestPage7]].
 			array( $this->pageId1 + 1, $this->pageId2 + 1, $this->pageId3 + 1,
 				$this->pageId4 + 1, $this->pageId5 + 1, $this->pageId6 + 1 ),
 			"Page ids increasing without holes" );
-
 	}
 
-	/**
-	 * Opens an XML file to analyze as feed.
-	 *
-	 * A opening feed tag is asserted and skipped over.
-	 *
-	 * @param $fname string: name of file to analyze
-	 */
-	private function assertFeedStart( $fname ) {
-		$this->assertDumpStart( $fname, false );
-		$this->xml->read();
-		$this->assertNodeStart( "feed" );
-		$this->skipWhitespace();
-	}
-
-	/**
-	 * Asserts that the xml reader is at the final closing tag of the feed file and
-	 * closes the reader.
-	 */
-	private function assertFeedEnd() {
-		$this->assertDumpEnd( "feed" );
-	}
-
-	/**
-	 * Asserts that the xml reader is at the start of a doc element and skips over the
-	 * first tags, after checking them.
-	 *
-	 * Besides the opening doc element, this function also checks for and skips over the
-	 * title, url, and abstract tags and also the opening links element. Hence, after
-	 * this function, the xml reader is at the first link element of the doc.
-	 *
-	 * @param $title string: title of the doc
-	 * @param $abstract string: abstract of the doc
-	 * @param $ns int: (optional) namespace for the title
-	 */
-	private function assertDocStart( $title, $abstract, $ns = NS_MAIN ) {
-		global $wgSitename;
-		$this->assertNodeStart( "doc" );
-		$this->skipWhitespace();
-
-		$title = Title::makeTitle( $ns, $title );
-		$this->assertNotNull( $title, "Title generation for <doc> tag" );
-		$this->assertTextNode( "title", $wgSitename . ": " . $title->getPrefixedText() );
-
-		$this->currentDocURL = $title->getCanonicalURL();
-		$this->assertTextNode( "url", $this->currentDocURL );
-
-		$this->assertTextNode( "abstract", $abstract );
-
-		$this->assertNodeStart( "links" );
-		$this->skipWhitespace();
-	}
-
-	/**
-	 * Asserts that the xml reader is after the last link element of the doc.
-	 *
-	 * The function skips past closing links and doc elements.
-	 */
-	private function assertDocEnd() {
-		$this->assertNodeEnd( "links" );
-		$this->skipWhitespace();
-
-		$this->assertNodeEnd( "doc" );
-		$this->skipWhitespace();
-	}
-
-	/**
-	 * Asserts that the xml reader is at a link element and skips over it, while analyzing it.
-	 *
-	 * @param $name string: name of the link
-	 * @param $is_category bool: (optional) Whether or not the link is a link to a category.
-	 *             If true, $name is the categories title without namespace. If false, $name
-	 *             is interpreted as name of a subsection within the current doc.
-	 */
-	private function assertLink( $name, $is_category = false ) {
-		$this->assertNodeStart( "sublink" );
-		$this->skipWhitespace();
-
-		$this->assertTextNode( "anchor", $name );
-		if ( $is_category ) {
-			$link = Title::makeTitle( NS_CATEGORY, $name );
-			$this->assertTextNode( "link", $link->getCanonicalURL() );
-		} else {
-			$this->assertTextNode( "link", $this->currentDocURL . "#"
-				. str_replace( array( ' ', '&' ), array( '_', '.26' ), $name ) );
-		}
-
-		$this->assertNodeEnd( "sublink" );
-		$this->skipWhitespace();
-	}
-
-	function testPlain () {
+	function testPlain() {
+		// @codingStandardsIgnoreStart
 		global $IP;
+		// @codingStandardsIgnoreEnd
 
 		// Setting up the dump
 		$fname = $this->getNewTempFile();
 		$dumper = new BackupDumper( array(
-				"--plugin=AbstractFilter:$IP/extensions/ActiveAbstract/AbstractFilter.php",
-				"--output=file:" . $fname, "--filter=abstract" ) );
+			"--plugin=AbstractFilter:$IP/extensions/ActiveAbstract/AbstractFilter.php",
+			"--output=file:" . $fname, "--filter=abstract" ) );
 		$dumper->startId = $this->pageId1;
 		$dumper->endId = $this->pageId4 + 1; // Not including the redirect page (db isolation)
 		$dumper->reporting = false;
@@ -293,24 +200,117 @@ Link to Page7 as Category [[Category:BackupDumperAbstractsTestPage7]].
 		$this->assertDocEnd();
 
 		$this->assertFeedEnd();
-
 	}
 
-	function testXmlDumpsBackupUseCase () {
-		global $IP;
+	/**
+	 * Opens an XML file to analyze as feed.
+	 *
+	 * A opening feed tag is asserted and skipped over.
+	 *
+	 * @param $fname string: name of file to analyze
+	 */
+	private function assertFeedStart( $fname ) {
+		$this->assertDumpStart( $fname, false );
+		$this->xml->read();
+		$this->assertNodeStart( "feed" );
+		$this->skipWhitespace();
+	}
 
-		// When dumping pages that contain no subsections (this is what we will to with
-		// pages 6, and 7), AbstractFilter tries to check for the pages' categories to
-		// use as links. Therefore, AbstractFilter grabs a new database connection,
-		// hence does not see the temporary tables created by the test suite. We cannot
-		// add and use dependency injection in AbstractFilter to overcome this, as this
-		// test's database connection is right in the middle of yielding the (unbuffered)
-		// result of querying for the pages/revisions.
-		//
-		// We could of course add means to force buffered resultsets for the dump process,
-		// but this would no longer represent xmldumps-backups use case.
-		//
-		// Long story short: When using temporary tables, we have to skip the test :(
+	/**
+	 * Asserts that the xml reader is at the start of a doc element and skips over the
+	 * first tags, after checking them.
+	 *
+	 * Besides the opening doc element, this function also checks for and skips over the
+	 * title, url, and abstract tags and also the opening links element. Hence, after
+	 * this function, the xml reader is at the first link element of the doc.
+	 *
+	 * @param $title string: title of the doc
+	 * @param $abstract string: abstract of the doc
+	 * @param $ns int: (optional) namespace for the title
+	 */
+	private function assertDocStart( $title, $abstract, $ns = NS_MAIN ) {
+		global $wgSitename;
+		$this->assertNodeStart( "doc" );
+		$this->skipWhitespace();
+
+		$title = Title::makeTitle( $ns, $title );
+		$this->assertNotNull( $title, "Title generation for <doc> tag" );
+		$this->assertTextNode( "title", $wgSitename . ": " . $title->getPrefixedText() );
+
+		$this->currentDocURL = $title->getCanonicalURL();
+		$this->assertTextNode( "url", $this->currentDocURL );
+
+		$this->assertTextNode( "abstract", $abstract );
+
+		$this->assertNodeStart( "links" );
+		$this->skipWhitespace();
+	}
+
+	/**
+	 * Asserts that the xml reader is at a link element and skips over it, while analyzing it.
+	 *
+	 * @param $name string: name of the link
+	 * @param $is_category bool: (optional) Whether or not the link is a link to a category.
+	 *             If true, $name is the categories title without namespace. If false, $name
+	 *             is interpreted as name of a subsection within the current doc.
+	 */
+	private function assertLink( $name, $is_category = false ) {
+		$this->assertNodeStart( "sublink" );
+		$this->skipWhitespace();
+
+		$this->assertTextNode( "anchor", $name );
+		if ( $is_category ) {
+			$link = Title::makeTitle( NS_CATEGORY, $name );
+			$this->assertTextNode( "link", $link->getCanonicalURL() );
+		} else {
+			$this->assertTextNode( "link", $this->currentDocURL . "#"
+				. str_replace( array( ' ', '&' ), array( '_', '.26' ), $name ) );
+		}
+
+		$this->assertNodeEnd( "sublink" );
+		$this->skipWhitespace();
+	}
+
+	/**
+	 * Asserts that the xml reader is after the last link element of the doc.
+	 *
+	 * The function skips past closing links and doc elements.
+	 */
+	private function assertDocEnd() {
+		$this->assertNodeEnd( "links" );
+		$this->skipWhitespace();
+
+		$this->assertNodeEnd( "doc" );
+		$this->skipWhitespace();
+	}
+
+	/**
+	 * Asserts that the xml reader is at the final closing tag of the feed file and
+	 * closes the reader.
+	 */
+	private function assertFeedEnd() {
+		$this->assertDumpEnd( "feed" );
+	}
+
+	function testXmlDumpsBackupUseCase() {
+		// @codingStandardsIgnoreStart
+		global $IP;
+		// @codingStandardsIgnoreEnd
+
+		/**
+		 * When dumping pages that contain no subsections (this is what we will to with
+		 * pages 6, and 7), AbstractFilter tries to check for the pages' categories to
+		 * use as links. Therefore, AbstractFilter grabs a new database connection,
+		 * hence does not see the temporary tables created by the test suite. We cannot
+		 * add and use dependency injection in AbstractFilter to overcome this, as this
+		 * test's database connection is right in the middle of yielding the (unbuffered)
+		 * result of querying for the pages/revisions.
+		 *
+		 * We could of course add means to force buffered resultsets for the dump process,
+		 * but this would no longer represent xmldumps-backups use case.
+		 *
+		 * Long story short: When using temporary tables, we have to skip the test :(
+		 */
 		if ( $this->usesTemporaryTables() ) {
 			$this->markTestSkipped( "This test grabs new database connections at "
 				. "several times. Run the test suite with --use-normal-tables "
@@ -320,9 +320,10 @@ Link to Page7 as Category [[Category:BackupDumperAbstractsTestPage7]].
 		// Setting up the dump
 		$fname = $this->getNewTempFile();
 		$dumper = new BackupDumper( array(
-				"--plugin=AbstractFilter:$IP/extensions/ActiveAbstract/AbstractFilter.php",
-				"--current", "--output=file:" . $fname,  "--filter=namespace:NS_MAIN",
-				"--filter=noredirect", "--filter=abstract" ) );
+			"--plugin=AbstractFilter:$IP/extensions/ActiveAbstract/AbstractFilter.php",
+			"--current", "--output=file:" . $fname, "--filter=namespace:NS_MAIN",
+			"--filter=noredirect", "--filter=abstract"
+		) );
 		$dumper->startId = $this->pageId1;
 		$dumper->endId = $this->pageId7 + 1;
 
@@ -331,7 +332,7 @@ Link to Page7 as Category [[Category:BackupDumperAbstractsTestPage7]].
 		// computer. We only check that reporting does not crash the dumping
 		// and that something is reported
 		$dumper->stderr = fopen( 'php://output', 'a' );
-		if ( $dumper->stderr === FALSE ) {
+		if ( $dumper->stderr === false ) {
 			$this->fail( "Could not open stream for stderr" );
 		}
 
