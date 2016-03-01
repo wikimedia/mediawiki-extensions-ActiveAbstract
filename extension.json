@@ -4,9 +4,14 @@
 		"Brion Vibber"
 	],
 	"url": "https://www.mediawiki.org/wiki/Extension:ActiveAbstract",
-	"description": "Generate XML feed for Yahoo's Active Abstracts project",
+	"descriptionmsg": "activeabstract-desc",
 	"license-name": "GPL-2.0+",
 	"type": "other",
+	"MessagesDirs": {
+		"ActiveAbstract": [
+			"i18n"
+		]
+	},
 	"Hooks": {
 		"UnitTestsList": [
 			"ActiveAbstractTestHooks::getUnitTests"
