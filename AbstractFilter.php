@@ -175,19 +175,19 @@ class AbstractFilter {
 	 * @return string
 	 */
 	function extractStart( $text ) {
-		$endchars = array(
+		$endchars = [
 			'.', '!', '?', // regular ASCII
 			'。', // full-width ideographic full-stop
 			'．', '！', '？', // double-width roman forms
 			'｡', // half-width ideographic full stop
-		);
+		];
 
 		$endgroup = implode( '', array_map( 'preg_quote', $endchars ) );
 		$end = "[$endgroup]";
 		$sentence = ".*?$end+";
 		$firsttwo = "/^($sentence$sentence)/u";
 
-		$matches = array();
+		$matches = [];
 
 		if ( preg_match( $firsttwo, $text, $matches ) ) {
 			return $matches[1];
@@ -217,7 +217,7 @@ class AbstractFilter {
 			PREG_SPLIT_DELIM_CAPTURE
 		);
 
-		$headers = array();
+		$headers = [];
 		$secsCount = count( $secs );
 		for ( $i = 1; $i < $secsCount; $i += 2 ) {
 			$inside = preg_replace( '/^=+\s*(.*?)\s*=+/', '$1', $secs[$i] );
@@ -240,11 +240,11 @@ class AbstractFilter {
 		$id = $rev->page_id;
 		$dbr = wfGetDB( DB_SLAVE );
 		$result = $dbr->select( 'categorylinks',
-			array( 'cl_to' ),
-			array( 'cl_from' => $id ),
+			[ 'cl_to' ],
+			[ 'cl_from' => $id ],
 			__METHOD__ );
 
-		$links = array();
+		$links = [];
 		foreach ( $result as $row ) {
 			$category = Title::makeTitle( NS_CATEGORY, $row->cl_to );
 			$links[$category->getText()] = $category->getCanonicalUrl();
@@ -267,7 +267,7 @@ class AbstractFilter {
 	 */
 	protected function formatLink( $url, $anchor, $type ) {
 		$maxUrlLength = 1024; // as defined in Yahoo's .xsd
-		return Xml::openElement( 'sublink', array( 'linktype' => $type ) ) .
+		return Xml::openElement( 'sublink', [ 'linktype' => $type ] ) .
 			Xml::element( 'anchor', null, $this->variant( $anchor ) ) .
 			Xml::element( 'link', null, substr( $url, 0, $maxUrlLength ) ) .
 			Xml::closeElement( 'sublink' ) . "\n";

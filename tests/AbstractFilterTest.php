@@ -105,12 +105,12 @@ class DroppingReturnValueMap implements PHPUnit_Framework_MockObject_Stub {
 class AbstractFilterTest extends DumpTestCase {
 
 	function testRegister() {
-		$map = array(
-			array( 'abstract', 'AbstractFilter', null ),
-			array( 'noredirect', 'NoredirectFilter', null )
-		);
+		$map = [
+			[ 'abstract', 'AbstractFilter', null ],
+			[ 'noredirect', 'NoredirectFilter', null ]
+		];
 
-		$dumperMock = $this->getMock( 'BackupDumper', array(), array(), '', false );
+		$dumperMock = $this->getMock( 'BackupDumper', [], [], '', false );
 
 		$dumperMock->expects( $this->exactly( count( $map ) ) )
 			->method( 'registerFilter' )

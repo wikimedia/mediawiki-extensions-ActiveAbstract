@@ -73,9 +73,9 @@ class GoogleCoopFilter extends AbstractFilter {
 		$xml = "  <ResultSpec id=\"mw${n}\">\n";
 		$xml .= '    ' . Xml::element( 'Query', null, $this->title->getPrefixedText() ) . "\n";
 		$xml .= "    <Response>\n";
-		$xml .= '      ' . Xml::element( 'Output', array( 'name' => 'title' ),
+		$xml .= '      ' . Xml::element( 'Output', [ 'name' => 'title' ],
 				$wgSitename . ':' . $this->title->getPrefixedText() ) . "\n";
-		$xml .= '      ' . Xml::element( 'Output', array( 'name' => 'more_url' ),
+		$xml .= '      ' . Xml::element( 'Output', [ 'name' => 'more_url' ],
 				$this->title->getCanonicalUrl() ) . "\n";
 
 		// add abstract and links when we have revision data...
@@ -94,7 +94,7 @@ class GoogleCoopFilter extends AbstractFilter {
 			$lines = $this->threeLines( $text );
 			for ( $i = 1; $i < 4; $i++ ) {
 				if ( $lines[$i] != '' ) {
-					$xml .= '      ' . Xml::element( 'Output', array( 'name' => 'text' . $i ), $lines[$i] ) . "\n";
+					$xml .= '      ' . Xml::element( 'Output', [ 'name' => 'text' . $i ], $lines[$i] ) . "\n";
 				}
 			}
 		}
@@ -124,23 +124,23 @@ class GoogleCoopFilter extends AbstractFilter {
 	 * @return array|string
 	 */
 	function threeLines( $str ) {
-		$s = array();
+		$s = [];
 
 		$slen = strlen( $str );
 
 		if ( $slen < 79 ) {
-			return array( 1 => $str, 2 => '', 3 => '' );
+			return [ 1 => $str, 2 => '', 3 => '' ];
 		}
 
 		$a = strrchr( substr( $str, 0, 79 ), ' ' );
 		$s1len = 79 - strlen( $a );
 		if ( $s1len == 79 ) {
-			return array( 1 => $str, 2 => '', 3 => '' );
+			return [ 1 => $str, 2 => '', 3 => '' ];
 		}
 		$s[1] = substr( $str, 0, $s1len );
 
 		if ( $slen < $s1len + 79 ) {
-			return array( 1 => $s[1], 2 => substr( $str, $s1len + 1 ), 3 => '' );
+			return [ 1 => $s[1], 2 => substr( $str, $s1len + 1 ), 3 => '' ];
 		}
 
 		$b = strrchr( substr( $str, $s1len + 1, 79 ), ' ' );
@@ -148,7 +148,7 @@ class GoogleCoopFilter extends AbstractFilter {
 		$s[2] = substr( $str, $s1len + 1, $s2len );
 
 		if ( $slen < $s1len + $s2len + 79 ) {
-			return array( 1 => $s[1], 2 => $s[2], 3 => substr( $str, $s1len + $s2len + 1 ) );
+			return [ 1 => $s[1], 2 => $s[2], 3 => substr( $str, $s1len + $s2len + 1 ) ];
 		}
 
 		$c = strrchr( substr( $str, $s1len + $s2len + 2, 76 ), ' ' );

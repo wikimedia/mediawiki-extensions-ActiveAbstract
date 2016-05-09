@@ -147,10 +147,10 @@ Link to Page7 as Category [[Category:BackupDumperAbstractsTestPage7]].
 		// class), we have to assert, that the page id are consecutively
 		// increasing
 		$this->assertEquals(
-			array( $this->pageId2, $this->pageId3, $this->pageId4,
-				$this->pageId5, $this->pageId6, $this->pageId7 ),
-			array( $this->pageId1 + 1, $this->pageId2 + 1, $this->pageId3 + 1,
-				$this->pageId4 + 1, $this->pageId5 + 1, $this->pageId6 + 1 ),
+			[ $this->pageId2, $this->pageId3, $this->pageId4,
+				$this->pageId5, $this->pageId6, $this->pageId7 ],
+			[ $this->pageId1 + 1, $this->pageId2 + 1, $this->pageId3 + 1,
+				$this->pageId4 + 1, $this->pageId5 + 1, $this->pageId6 + 1 ],
 			"Page ids increasing without holes" );
 	}
 
@@ -161,9 +161,9 @@ Link to Page7 as Category [[Category:BackupDumperAbstractsTestPage7]].
 
 		// Setting up the dump
 		$fname = $this->getNewTempFile();
-		$dumper = new BackupDumper( array(
+		$dumper = new BackupDumper( [
 			"--plugin=AbstractFilter:$IP/extensions/ActiveAbstract/AbstractFilter.php",
-			"--output=file:" . $fname, "--filter=abstract" ) );
+			"--output=file:" . $fname, "--filter=abstract" ] );
 		$dumper->startId = $this->pageId1;
 		$dumper->endId = $this->pageId4 + 1; // Not including the redirect page (db isolation)
 		$dumper->reporting = false;
@@ -264,7 +264,7 @@ Link to Page7 as Category [[Category:BackupDumperAbstractsTestPage7]].
 			$this->assertTextNode( "link", $link->getCanonicalURL() );
 		} else {
 			$this->assertTextNode( "link", $this->currentDocURL . "#"
-				. str_replace( array( ' ', '&' ), array( '_', '.26' ), $name ) );
+				. str_replace( [ ' ', '&' ], [ '_', '.26' ], $name ) );
 		}
 
 		$this->assertNodeEnd( "sublink" );
@@ -319,11 +319,11 @@ Link to Page7 as Category [[Category:BackupDumperAbstractsTestPage7]].
 
 		// Setting up the dump
 		$fname = $this->getNewTempFile();
-		$dumper = new BackupDumper( array(
+		$dumper = new BackupDumper( [
 			"--plugin=AbstractFilter:$IP/extensions/ActiveAbstract/AbstractFilter.php",
 			"--current", "--output=file:" . $fname, "--filter=namespace:NS_MAIN",
 			"--filter=noredirect", "--filter=abstract"
-		) );
+		] );
 		$dumper->startId = $this->pageId1;
 		$dumper->endId = $this->pageId7 + 1;
 
