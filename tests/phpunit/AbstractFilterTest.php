@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../AbstractFilter.php';
+require_once __DIR__ . '/../../AbstractFilter.php';
 
 /**
  * An Stub implementation taking return values from an array while removing

@@ -12,13 +12,5 @@
 			"i18n"
 		]
 	},
-	"Hooks": {
-		"UnitTestsList": [
-			"ActiveAbstractTestHooks::getUnitTests"
-		]
-	},
-	"AutoloadClasses": {
-		"ActiveAbstractTestHooks": "tests/ActiveAbstractTest.hooks.php"
-	},
 	"manifest_version": 1
 }
