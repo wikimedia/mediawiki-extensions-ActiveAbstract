@@ -1,4 +1,8 @@
 {
-	"@metadata": [],
+	"@metadata": {
+		"authors": [
+			"Jon Harald Søby"
+		]
+	},
 	"activeabstract-desc": "Generer XML-mating for Yahoos Active Abstracts-prosjekt"
 }
