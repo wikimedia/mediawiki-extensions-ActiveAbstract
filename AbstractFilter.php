@@ -133,7 +133,7 @@ class AbstractFilter {
 
 		$text = substr( $text, 0, 4096 ); // don't bother with long text...
 
-		$image = preg_quote( $wgContLang->getNsText( NS_IMAGE ), '#' );
+		$image = preg_quote( $wgContLang->getNsText( NS_FILE ), '#' );
 		$text = str_replace( "'''", "", $text );
 		$text = str_replace( "''", "", $text );
 		// HTML-style comments
