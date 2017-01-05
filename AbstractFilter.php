@@ -15,6 +15,8 @@
  *   --filter=abstract:variant=zh-cn
  */
 
+use UtfNormal\Validator;
+
 /**
  * Tosses away the MediaWiki XML and generates new output
  */
@@ -120,7 +122,7 @@ class AbstractFilter {
 		$extract = $this->extractStart( $stripped );
 		$clipped = substr( $extract, 0, 1024 ); // not too long pls
 
-		return UtfNormal::cleanUp( $clipped );
+		return Validator::cleanUp( $clipped );
 	}
 
 	/**
@@ -222,7 +224,7 @@ class AbstractFilter {
 		for ( $i = 1; $i < $secsCount; $i += 2 ) {
 			$inside = preg_replace( '/^=+\s*(.*?)\s*=+/', '$1', $secs[$i] );
 			$stripped = $this->stripMarkup( $inside ); // strip internal markup and <h[1-6]>
-			$header = UtfNormal::cleanUp( $stripped );
+			$header = Validator::cleanUp( $stripped );
 			$anchor = $wgParser->guessSectionNameFromWikiText( $header );
 			$url = $this->title->getCanonicalUrl() . $anchor;
 			$headers[$header] = $url;
