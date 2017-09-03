@@ -1,8 +1,9 @@
 {
 	"@metadata": {
 		"authors": [
-			"Macofe"
+			"Macofe",
+			"Fitoschido"
 		]
 	},
-	"activeabstract-desc": "Generar canal XML feed para el proyecto Active Abstracts de Yahoo"
+	"activeabstract-desc": "Generación de suministros XML para el proyecto Active Abstracts de Yahoo"
 }
