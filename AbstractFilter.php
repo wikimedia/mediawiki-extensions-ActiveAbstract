@@ -22,8 +22,8 @@ use UtfNormal\Validator;
  */
 class AbstractFilter {
 	/**
-	 * @param $sink ExportProgressFilter
-	 * @param $params string
+	 * @param ExportProgressFilter &$sink
+	 * @param string $params
 	 */
 	function __construct( &$sink, $params = '' ) {
 		$this->sink =& $sink;
@@ -45,14 +45,24 @@ class AbstractFilter {
 		$dumper->registerFilter( 'noredirect', 'NoredirectFilter' );
 	}
 
+	/**
+	 * @param string $string
+	 */
 	function writeOpenStream( $string ) {
 		$this->sink->writeOpenStream( "<feed>\n" );
 	}
 
+	/**
+	 * @param string $string
+	 */
 	function writeCloseStream( $string ) {
 		$this->sink->writeCloseStream( "</feed>\n" );
 	}
 
+	/**
+	 * @param stdClass $page
+	 * @param string $string
+	 */
 	function writeOpenPage( $page, $string ) {
 		global $wgSitename;
 		$this->title = Title::makeTitle( $page->page_namespace, $page->page_title );
@@ -83,6 +93,9 @@ class AbstractFilter {
 		}
 	}
 
+	/**
+	 * @param string $string
+	 */
 	function writeClosePage( $string ) {
 		$xml = '';
 		if ( $this->revision ) {
@@ -275,6 +288,10 @@ class AbstractFilter {
 			Xml::closeElement( 'sublink' ) . "\n";
 	}
 
+	/**
+	 * @param Revision $rev
+	 * @param string $string
+	 */
 	function writeRevision( $rev, $string ) {
 		// Only use one revision's worth of data to output
 		$this->revision = $rev;
@@ -283,7 +300,7 @@ class AbstractFilter {
 
 class NoredirectFilter extends DumpFilter {
 	/**
-	 * @param $page
+	 * @param stdClass $page
 	 * @return bool
 	 */
 	function pass( $page ) {
