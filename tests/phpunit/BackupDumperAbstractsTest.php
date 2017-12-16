@@ -1,5 +1,4 @@
 <?php
-require_once __DIR__ . '/../../AbstractFilter.php';
 
 /**
  * Tests for BackupDumper producing abstract dumps using Abstractfilter

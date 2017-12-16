@@ -15,5 +15,11 @@
 			"i18n"
 		]
 	},
+	"AutoloadClasses": {
+		"AbstractFilter": "AbstractFilter.php",
+		"DroppingReturnValueMap": "tests/phpunit/DroppingReturnValueMap.php",
+		"NoredirectFilter": "NoredirectFilter.php",
+		"GoogleCoopFilter": "GoogleCoopFilter.php"
+	},
 	"manifest_version": 1
 }

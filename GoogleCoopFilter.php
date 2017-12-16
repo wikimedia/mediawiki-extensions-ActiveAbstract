@@ -1,5 +1,4 @@
 <?php
-require_once 'AbstractFilter.php';
 
 /**
  * Dump filter for creation of a Google Coop 'Subscribed Links' file
