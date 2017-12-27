@@ -4,7 +4,7 @@
  * Plugin for dumpBackup.php; call as eg:
  *
  * php dumpBackup.php \
- *   --plugin=AbstractFilter:extensions/ActiveAbstract/AbstractFilter.php \
+ *   --plugin=AbstractFilter \
  *   --current \
  *   --output=gzip:/dumps/abstract.xml.gz \
  *     --filter=namespace:NS_MAIN \

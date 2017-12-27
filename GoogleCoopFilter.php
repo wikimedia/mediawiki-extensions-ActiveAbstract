@@ -6,7 +6,7 @@
  * Usage:
  *
  * HOSTNAME=kamelopedia.mormo.org php dumpBackup.php \
- *    --plugin=GoogleCoopFilter:Extension/ActiveAbstract/GoogleCoopFilter.php \
+ *    --plugin=GoogleCoopFilter \
  *    --current --output=file:coop3.xml --filter=namespace:NS_MAIN \
  *    --filter=noredirect --filter=googlecoop
  *

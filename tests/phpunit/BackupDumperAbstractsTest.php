@@ -161,7 +161,7 @@ Link to Page7 as Category [[Category:BackupDumperAbstractsTestPage7]].
 		// Setting up the dump
 		$fname = $this->getNewTempFile();
 		$dumper = new BackupDumper( [
-			"--plugin=AbstractFilter:$IP/extensions/ActiveAbstract/AbstractFilter.php",
+			"--plugin=AbstractFilter",
 			"--output=file:" . $fname, "--filter=abstract" ] );
 		$dumper->startId = $this->pageId1;
 		$dumper->endId = $this->pageId4 + 1; // Not including the redirect page (db isolation)
@@ -319,7 +319,7 @@ Link to Page7 as Category [[Category:BackupDumperAbstractsTestPage7]].
 		// Setting up the dump
 		$fname = $this->getNewTempFile();
 		$dumper = new BackupDumper( [
-			"--plugin=AbstractFilter:$IP/extensions/ActiveAbstract/AbstractFilter.php",
+			"--plugin=AbstractFilter",
 			"--current", "--output=file:" . $fname, "--filter=namespace:NS_MAIN",
 			"--filter=noredirect", "--filter=abstract"
 		] );
