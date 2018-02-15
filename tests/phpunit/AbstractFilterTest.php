@@ -1,5 +1,7 @@
 <?php
 
+use MediaWiki\Tests\Maintenance\DumpTestCase;
+
 /**
  * Unit tests for Abstractfilter
  *
