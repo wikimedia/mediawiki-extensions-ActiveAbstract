@@ -99,9 +99,14 @@ class AbstractFilter {
 	function writeClosePage( $string ) {
 		$xml = '';
 		if ( $this->revision ) {
-			$xml .= Xml::element( 'abstract', null,
-				$this->variant(
-					$this->extractAbstract( $this->revision ) ) ) . "\n";
+			if ( $this->title->getContentModel() === CONTENT_MODEL_TEXT
+				|| $this->title->getContentModel() === CONTENT_MODEL_WIKITEXT ) {
+				$xml .= Xml::element( 'abstract', null,
+					$this->variant(
+						$this->extractAbstract( $this->revision ) ) ) . "\n";
+			} else {
+				$xml .= Xml::element( 'abstract', [ 'not-applicable' => '' ] ) . "\n";
+			}
 			$xml .= "<links>\n";
 
 			$links = $this->sectionLinks( $this->revision );
