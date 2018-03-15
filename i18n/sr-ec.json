@@ -2,8 +2,9 @@
 	"@metadata": {
 		"authors": [
 			"Obsuser",
-			"Acamicamacaraca"
+			"Acamicamacaraca",
+			"BadDog"
 		]
 	},
-	"activeabstract-desc": "Генерисање XML фида за Јаху Active Abstracts пројекат"
+	"activeabstract-desc": "Генерише XML фид за Јаху Active Abstracts пројекат"
 }
