@@ -156,10 +156,6 @@ Link to Page7 as Category [[Category:BackupDumperAbstractsTestPage7]].
 	}
 
 	function testPlain() {
-		// @codingStandardsIgnoreStart
-		global $IP;
-		// @codingStandardsIgnoreEnd
-
 		// Setting up the dump
 		$fname = $this->getNewTempFile();
 		$dumper = new BackupDumper( [
@@ -294,10 +290,6 @@ Link to Page7 as Category [[Category:BackupDumperAbstractsTestPage7]].
 	}
 
 	function testXmlDumpsBackupUseCase() {
-		// @codingStandardsIgnoreStart
-		global $IP;
-		// @codingStandardsIgnoreEnd
-
 		/**
 		 * When dumping pages that contain no subsections (this is what we will to with
 		 * pages 6, and 7), AbstractFilter tries to check for the pages' categories to
