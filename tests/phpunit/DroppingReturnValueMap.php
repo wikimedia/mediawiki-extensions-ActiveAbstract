@@ -50,7 +50,15 @@ class DroppingReturnValueMap implements PHPUnit_Framework_MockObject_Stub {
 
 	/** @inheritDoc */
 	public function invoke( PHPUnit_Framework_MockObject_Invocation $invocation ) {
-		$parameterCount = count( $invocation->parameters );
+		if ( isset( $invocation->parameters ) ) {
+			// $invocation->parameters is only public in PHPUnit < 6
+			$parameters = $invocation->parameters;
+		} else {
+			// $invocation->getParameters() only exists in PHPUnit 6+
+			$parameters = $invocation->getParameters();
+		}
+
+		$parameterCount = count( $parameters );
 
 		foreach ( $this->valueMap as $key => $map ) {
 			if ( !is_array( $map ) || $parameterCount != count( $map ) - 1 ) {
@@ -58,7 +66,7 @@ class DroppingReturnValueMap implements PHPUnit_Framework_MockObject_Stub {
 			}
 
 			$return = array_pop( $map );
-			if ( $invocation->parameters === $map ) {
+			if ( $parameters === $map ) {
 				unset( $this->valueMap[$key] );
 
 				return $return;
@@ -69,7 +77,7 @@ class DroppingReturnValueMap implements PHPUnit_Framework_MockObject_Stub {
 		// formatting the actual parameters in $actual, to have a nice error message
 		$actual = "(";
 		$connective = "";
-		foreach ( $invocation->parameters as $parameter ) {
+		foreach ( $parameters as $parameter ) {
 			$actual .= $connective . " ";
 			try {
 				$actual .= strval( $parameter );
