@@ -12,6 +12,8 @@ use MediaWiki\Tests\Maintenance\DumpTestCase;
  *
  * @group Database
  * @group Dump
+ * @covers AbstractFilter
+ * @covers NoredirectFilter
  */
 class AbstractFilterTest extends DumpTestCase {
 
