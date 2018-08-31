@@ -156,9 +156,29 @@ Link to Page7 as Category [[Category:BackupDumperAbstractsTestPage7]].
 	}
 
 	function testPlain() {
+		/**
+		 * When dumping pages that contain no subsections (this is what we will to with
+		 * pages 6, and 7), AbstractFilter tries to check for the pages' categories to
+		 * use as links. Therefore, AbstractFilter grabs a new database connection,
+		 * hence does not see the temporary tables created by the test suite. We cannot
+		 * add and use dependency injection in AbstractFilter to overcome this, as this
+		 * test's database connection is right in the middle of yielding the (unbuffered)
+		 * result of querying for the pages/revisions.
+		 *
+		 * We could of course add means to force buffered resultsets for the dump process,
+		 * but this would no longer represent xmldumps-backups use case.
+		 *
+		 * Long story short: When using temporary tables, we have to skip the test :(
+		 */
+		if ( $this->usesTemporaryTables() ) {
+			$this->markTestSkipped( "This test grabs new database connections at "
+				. "several times. Run the test suite with --use-normal-tables "
+				. "to not skip this test" );
+		}
+
 		// Setting up the dump
 		$fname = $this->getNewTempFile();
-		$dumper = new BackupDumper( [
+		$dumper = new DumpBackup( [
 			"--plugin=AbstractFilter",
 			"--output=file:" . $fname, "--filter=abstract" ] );
 		$dumper->startId = $this->pageId1;
@@ -312,7 +332,7 @@ Link to Page7 as Category [[Category:BackupDumperAbstractsTestPage7]].
 
 		// Setting up the dump
 		$fname = $this->getNewTempFile();
-		$dumper = new BackupDumper( [
+		$dumper = new DumpBackup( [
 			"--plugin=AbstractFilter",
 			"--current", "--output=file:" . $fname, "--filter=namespace:NS_MAIN",
 			"--filter=noredirect", "--filter=abstract"
