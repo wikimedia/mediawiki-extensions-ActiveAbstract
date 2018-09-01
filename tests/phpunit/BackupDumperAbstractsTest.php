@@ -11,6 +11,7 @@ use MediaWiki\Tests\Maintenance\DumpTestCase;
  * @group medium
  * @group Database
  * @group Dump
+ * @coversNothing
  */
 class BackupDumperAbstractsTest extends DumpTestCase {
 	// We'll add several pages, revision and texts. The following variables hold the
