@@ -38,7 +38,7 @@ class AbstractFilter {
 	 * @param ExportProgressFilter &$sink
 	 * @param string $params
 	 */
-	function __construct( &$sink, $params = '' ) {
+	public function __construct( &$sink, $params = '' ) {
 		$this->sink =& $sink;
 
 		$bits = explode( '=', $params, 2 );
@@ -53,7 +53,7 @@ class AbstractFilter {
 	 * Register the filter function with the dump manager
 	 * @param BackupDumper $dumper
 	 */
-	static function register( $dumper ) {
+	public static function register( $dumper ) {
 		$dumper->registerFilter( 'abstract', 'AbstractFilter' );
 		$dumper->registerFilter( 'noredirect', 'NoredirectFilter' );
 	}
@@ -61,14 +61,14 @@ class AbstractFilter {
 	/**
 	 * @param string $string
 	 */
-	function writeOpenStream( $string ) {
+	public function writeOpenStream( $string ) {
 		$this->sink->writeOpenStream( "<feed>\n" );
 	}
 
 	/**
 	 * @param string $string
 	 */
-	function writeCloseStream( $string ) {
+	public function writeCloseStream( $string ) {
 		$this->sink->writeCloseStream( "</feed>\n" );
 	}
 
@@ -76,7 +76,7 @@ class AbstractFilter {
 	 * @param stdClass $page
 	 * @param string $string
 	 */
-	function writeOpenPage( $page, $string ) {
+	public function writeOpenPage( $page, $string ) {
 		global $wgSitename;
 		$this->title = Title::makeTitle( $page->page_namespace, $page->page_title );
 		$title = $wgSitename . wfMessage( 'colon-separator' )->text() . $this->title->getPrefixedText();
@@ -96,7 +96,7 @@ class AbstractFilter {
 	 * @param string $text
 	 * @return string
 	 */
-	function variant( $text ) {
+	private function variant( $text ) {
 		if ( $this->variant ) {
 			global $wgContLang;
 
@@ -109,7 +109,7 @@ class AbstractFilter {
 	/**
 	 * @param string $string
 	 */
-	function writeClosePage( $string ) {
+	public function writeClosePage( $string ) {
 		$xml = '';
 		if ( $this->revision ) {
 			if ( $this->title->getContentModel() === CONTENT_MODEL_TEXT
@@ -207,7 +207,7 @@ class AbstractFilter {
 	 * @param string $text
 	 * @return string
 	 */
-	function extractStart( $text ) {
+	private function extractStart( $text ) {
 		$endchars = [
 			'.', '!', '?', // regular ASCII
 			'。', // full-width ideographic full-stop
@@ -310,7 +310,7 @@ class AbstractFilter {
 	 * @param stdClass $rev
 	 * @param string $string
 	 */
-	function writeRevision( $rev, $string ) {
+	public function writeRevision( $rev, $string ) {
 		// Only use one revision's worth of data to output
 		$this->revision = $rev;
 	}

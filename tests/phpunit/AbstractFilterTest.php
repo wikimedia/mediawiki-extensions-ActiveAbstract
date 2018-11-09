@@ -17,7 +17,7 @@ use MediaWiki\Tests\Maintenance\DumpTestCase;
  */
 class AbstractFilterTest extends DumpTestCase {
 
-	function testRegister() {
+	public function testRegister() {
 		$map = [
 			[ 'abstract', 'AbstractFilter', null ],
 			[ 'noredirect', 'NoredirectFilter', null ]
@@ -42,11 +42,11 @@ class AbstractFilterTest extends DumpTestCase {
 	 *
 	 * @see DroppingReturnValueMap
 	 */
-	function droppingReturnValueMap( $valueMap ) {
+	private function droppingReturnValueMap( $valueMap ) {
 		return new DroppingReturnValueMap( $valueMap );
 	}
 
-	function testWriteOpenStreamNull() {
+	public function testWriteOpenStreamNull() {
 		$sinkMock = $this->getMock( 'DumpOutput' );
 
 		$sinkMock->expects( $this->exactly( 1 ) )
@@ -76,7 +76,7 @@ class AbstractFilterTest extends DumpTestCase {
 		$af->writeOpenStream( null );
 	}
 
-	function testWriteOpenStreamEmptyString() {
+	public function testWriteOpenStreamEmptyString() {
 		$sinkMock = $this->getMock( 'DumpOutput' );
 
 		$sinkMock->expects( $this->exactly( 1 ) )
@@ -106,7 +106,7 @@ class AbstractFilterTest extends DumpTestCase {
 		$af->writeOpenStream( "" );
 	}
 
-	function testWriteOpenStreamText() {
+	public function testWriteOpenStreamText() {
 		$sinkMock = $this->getMock( 'DumpOutput' );
 
 		$sinkMock->expects( $this->exactly( 1 ) )
@@ -136,7 +136,7 @@ class AbstractFilterTest extends DumpTestCase {
 		$af->writeOpenStream( "foo" );
 	}
 
-	function testWriteCloseStreamNull() {
+	public function testWriteCloseStreamNull() {
 		$sinkMock = $this->getMock( 'DumpOutput' );
 
 		$sinkMock->expects( $this->exactly( 1 ) )
@@ -166,7 +166,7 @@ class AbstractFilterTest extends DumpTestCase {
 		$af->writeCloseStream( null );
 	}
 
-	function testWriteCloseStreamEmptyString() {
+	public function testWriteCloseStreamEmptyString() {
 		$sinkMock = $this->getMock( 'DumpOutput' );
 
 		$sinkMock->expects( $this->exactly( 1 ) )
@@ -196,7 +196,7 @@ class AbstractFilterTest extends DumpTestCase {
 		$af->writeCloseStream( "" );
 	}
 
-	function testWriteCloseStreamText() {
+	public function testWriteCloseStreamText() {
 		$sinkMock = $this->getMock( 'DumpOutput' );
 
 		$sinkMock->expects( $this->exactly( 1 ) )
@@ -226,7 +226,7 @@ class AbstractFilterTest extends DumpTestCase {
 		$af->writeCloseStream( "foo" );
 	}
 
-	function testWriteRevision() {
+	public function testWriteRevision() {
 		$sinkMock = $this->getMock( 'DumpOutput' );
 
 		// No output of any kind is expected, as the filter outputs only the most current

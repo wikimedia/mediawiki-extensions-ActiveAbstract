@@ -25,7 +25,7 @@ class BackupDumperAbstractsTest extends DumpTestCase {
 	private $revId6_1, $textId6_1;
 	private $revId7_1, $textId7_1;
 
-	function addDBData() {
+	public function addDBData() {
 		$this->tablesUsed[] = 'page';
 		$this->tablesUsed[] = 'revision';
 		$this->tablesUsed[] = 'text';
@@ -141,7 +141,7 @@ Link to Page7 as Category [[Category:BackupDumperAbstractsTestPage7]].
 		}
 	}
 
-	function setUp() {
+	protected function setUp() {
 		parent::setUp();
 
 		// Since we will restrict dumping by page ranges (to allow
@@ -156,7 +156,7 @@ Link to Page7 as Category [[Category:BackupDumperAbstractsTestPage7]].
 			"Page ids increasing without holes" );
 	}
 
-	function testPlain() {
+	public function testPlain() {
 		/**
 		 * When dumping pages that contain no subsections (this is what we will to with
 		 * pages 6, and 7), AbstractFilter tries to check for the pages' categories to
@@ -310,7 +310,7 @@ Link to Page7 as Category [[Category:BackupDumperAbstractsTestPage7]].
 		$this->assertDumpEnd( "feed" );
 	}
 
-	function testXmlDumpsBackupUseCase() {
+	public function testXmlDumpsBackupUseCase() {
 		/**
 		 * When dumping pages that contain no subsections (this is what we will to with
 		 * pages 6, and 7), AbstractFilter tries to check for the pages' categories to
