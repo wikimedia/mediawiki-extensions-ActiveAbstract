@@ -21,6 +21,19 @@ use UtfNormal\Validator;
  * Tosses away the MediaWiki XML and generates new output
  */
 class AbstractFilter {
+
+	/** @var ExportProgressFilter */
+	protected $sink;
+
+	/** @var string|null */
+	private $variant;
+
+	/** @var Title|null */
+	protected $title;
+
+	/** @var stdClass|null */
+	protected $revision;
+
 	/**
 	 * @param ExportProgressFilter &$sink
 	 * @param string $params
@@ -130,7 +143,7 @@ class AbstractFilter {
 
 	/**
 	 * Extract an abstract from the page
-	 * @param object $rev Database rows with revision data
+	 * @param stdClass $rev Database row with revision data
 	 * @return string
 	 */
 	protected function extractAbstract( $rev ) {
@@ -221,7 +234,7 @@ class AbstractFilter {
 
 	/**
 	 * Extract a list of TOC links
-	 * @param object $rev Database rows with revision data
+	 * @param stdClass $rev Database row with revision data
 	 * @return array of URL strings, indexed by name/title
 	 *
 	 * @todo FIXME extract TOC items properly
@@ -253,7 +266,7 @@ class AbstractFilter {
 
 	/**
 	 * Fetch the list of category links for this page
-	 * @param object $rev Database rows with revision data
+	 * @param stdClass $rev Database row with revision data
 	 * @return array of URL strings, indexed by category name
 	 */
 	protected function categoryLinks( $rev ) {
@@ -294,7 +307,7 @@ class AbstractFilter {
 	}
 
 	/**
-	 * @param Revision $rev
+	 * @param stdClass $rev
 	 * @param string $string
 	 */
 	function writeRevision( $rev, $string ) {
