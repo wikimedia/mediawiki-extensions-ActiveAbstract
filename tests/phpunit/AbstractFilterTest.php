@@ -254,6 +254,6 @@ class AbstractFilterTest extends DumpTestCase {
 		// Performing the actual test
 
 		$af = new AbstractFilter( $sinkMock );
-		$af->writeRevision( "foo", "bar" );
+		$af->writeRevision( (object)[], 'bar' );
 	}
 }
