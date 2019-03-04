@@ -114,9 +114,13 @@ class AbstractFilter {
 		if ( $this->revision ) {
 			if ( $this->title->getContentModel() === CONTENT_MODEL_TEXT
 				|| $this->title->getContentModel() === CONTENT_MODEL_WIKITEXT ) {
-				$xml .= Xml::element( 'abstract', null,
-					$this->variant(
-						$this->extractAbstract( $this->revision ) ) ) . "\n";
+				try {
+					$xml .= Xml::element( 'abstract', null,
+						$this->variant(
+							$this->extractAbstract( $this->revision ) ) ) . "\n";
+				} catch ( MWContentSerializationException $ex ) {
+					$xml .= Xml::element( 'abstract', [ 'serialization-error' => '' ] ) . "\n";
+				}
 			} else {
 				$xml .= Xml::element( 'abstract', [ 'not-applicable' => '' ] ) . "\n";
 			}
