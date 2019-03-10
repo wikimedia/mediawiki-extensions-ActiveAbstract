@@ -1,8 +1,9 @@
 {
 	"@metadata": {
 		"authors": [
-			"Vodnokon4e"
+			"Vodnokon4e",
+			"StanProg"
 		]
 	},
-	"activeabstract-desc": "Създаване на XML емисия за проекта на Yahoo, Active Abstracts"
+	"activeabstract-desc": "Генериране на XML хранилка за проекта на Yahoo, Active Abstracts"
 }
