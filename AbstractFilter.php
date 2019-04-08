@@ -118,8 +118,13 @@ class AbstractFilter {
 					$xml .= Xml::element( 'abstract', null,
 						$this->variant(
 							$this->extractAbstract( $this->revision ) ) ) . "\n";
-				} catch ( MWContentSerializationException $ex ) {
-					$xml .= Xml::element( 'abstract', [ 'serialization-error' => '' ] ) . "\n";
+				} catch ( Exception $ex ) {
+					if ( $ex instanceof MWException || $ex instanceof RuntimeException ) {
+						$xml .= Xml::element( 'abstract', [ 'serialization-error' => '' ] ) . "\n";
+						wfLogWarning( "failed to get abstract for page " . $this->title->getPrefixedText() . "\n" );
+					} else {
+						throw $ex;
+					}
 				}
 			} else {
 				$xml .= Xml::element( 'abstract', [ 'not-applicable' => '' ] ) . "\n";
@@ -247,14 +252,24 @@ class AbstractFilter {
 	protected function sectionLinks( $rev ) {
 		global $wgParser;
 
-		$text = Revision::getRevisionText( $rev );
+		$headers = [];
+
+		try {
+			$text = Revision::getRevisionText( $rev );
+		} catch ( RuntimeException $ex ) {
+			if ( $ex instanceof MWException || $ex instanceof RuntimeException ) {
+				wfLogWarning( "failed to get text for revid " . $rev->rev_id . "\n" );
+				return $headers;
+			} else {
+				throw $ex;
+			}
+		}
 		$secs = preg_split(
 			'/(^=+.+?=+|^<h[1-6].*?' . '>.*?<\/h[1-6].*?' . '>)(?!\S)/mi',
 			$text, -1,
 			PREG_SPLIT_DELIM_CAPTURE
 		);
 
-		$headers = [];
 		$secsCount = count( $secs );
 		for ( $i = 1; $i < $secsCount; $i += 2 ) {
 			$inside = preg_replace( '/^=+\s*(.*?)\s*=+/', '$1', $secs[$i] );
