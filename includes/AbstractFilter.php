@@ -15,6 +15,7 @@
  *   --filter=abstract:variant=zh-cn
  */
 
+use MediaWiki\MediaWikiServices;
 use UtfNormal\Validator;
 
 /**
@@ -146,6 +147,10 @@ class AbstractFilter {
 		}
 		$xml .= "</doc>\n";
 		$this->sink->writeClosePage( $xml );
+		// In rare cases, link cache has the same key for some pages which
+		// might be read as part of the same batch. T220424
+		$linkCache = MediaWikiServices::getInstance()->getLinkCache();
+		$linkCache->clearLink( $this->title );
 		$this->title = null;
 		$this->revision = null;
 	}
