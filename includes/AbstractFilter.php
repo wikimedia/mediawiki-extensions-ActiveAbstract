@@ -122,7 +122,9 @@ class AbstractFilter {
 				} catch ( Exception $ex ) {
 					if ( $ex instanceof MWException || $ex instanceof RuntimeException ) {
 						$xml .= Xml::element( 'abstract', [ 'serialization-error' => '' ] ) . "\n";
-						wfLogWarning( "failed to get abstract for page " . $this->title->getPrefixedText() . "\n" );
+						wfLogWarning( "failed to get abstract content for page " .
+							$this->title->getPrefixedText() . " with id " .
+							$this->revision->rev_page . "\n" );
 					} else {
 						throw $ex;
 					}
@@ -132,15 +134,25 @@ class AbstractFilter {
 			}
 			$xml .= "<links>\n";
 
-			$links = $this->sectionLinks( $this->revision );
-			if ( empty( $links ) ) {
-				// If no TOC, they want us to fall back to categories.
-				$links = $this->categoryLinks( $this->revision );
+			try {
+				$links = $this->sectionLinks( $this->revision );
+				if ( empty( $links ) ) {
+					// If no TOC, they want us to fall back to categories.
+					$links = $this->categoryLinks( $this->revision );
+				}
+				foreach ( $links as $anchor => $url ) {
+					$xml .= $this->formatLink( $url, $anchor, 'nav' );
+				}
+			} catch ( Exception $ex ) {
+				if ( $ex instanceof MWException || $ex instanceof RuntimeException ) {
+					wfLogWarning( "failed to get abstract links for page " .
+						$this->title->getPrefixedText() . " with id " .
+						$this->revision->rev_page . "\n" );
+					$links = [];
+				} else {
+					throw $ex;
+				}
 			}
-			foreach ( $links as $anchor => $url ) {
-				$xml .= $this->formatLink( $url, $anchor, 'nav' );
-			}
-
 			// @todo: image links
 
 			$xml .= "</links>\n";
