@@ -16,6 +16,9 @@
  */
 
 use MediaWiki\MediaWikiServices;
+use MediaWiki\Revision\RevisionAccessException;
+use MediaWiki\Revision\SlotRecord;
+use MediaWiki\Storage\BlobAccessException;
 use UtfNormal\Validator;
 
 /**
@@ -168,12 +171,48 @@ class AbstractFilter {
 	}
 
 	/**
+	 * Get the page's textual content (main slot only).
+	 *
+	 * @param stdClass $rev Database row with revision data
+	 * @return string
+	 */
+	protected function getText( $rev ) {
+		try {
+			$store = MediaWikiServices::getInstance()->getRevisionStore();
+			$rec = $store->newRevisionFromRow( $rev );
+			$content = $rec->getContent( SlotRecord::MAIN );
+
+			if ( !$content instanceof TextContent ) {
+				// This should not happen, since writeClosePage() checks the content model.
+				return '';
+			}
+
+			// TODO: cache this!
+			$text = $content->getText();
+			return $text;
+		} catch ( MWException $ex ) {
+			// fall through
+		} catch ( RevisionAccessException $ex ) {
+			// fall through
+		} catch ( BlobAccessException $ex ) {
+			// fall through
+		} catch ( RuntimeException $ex ) {
+			// fall through
+		} catch ( InvalidArgumentException $ex ) {
+			// fall through
+		}
+
+		wfLogWarning( "failed to get text for revid " . $rev->rev_id . "\n" );
+		return '';
+	}
+
+	/**
 	 * Extract an abstract from the page
 	 * @param stdClass $rev Database row with revision data
 	 * @return string
 	 */
 	protected function extractAbstract( $rev ) {
-		$text = Revision::getRevisionText( $rev ); // FIXME cache this
+		$text = $this->getText( $rev );
 
 		$stripped = $this->stripMarkup( $text );
 		$extract = $this->extractStart( $stripped );
@@ -271,16 +310,7 @@ class AbstractFilter {
 
 		$headers = [];
 
-		try {
-			$text = Revision::getRevisionText( $rev );
-		} catch ( RuntimeException $ex ) {
-			if ( $ex instanceof MWException || $ex instanceof RuntimeException ) {
-				wfLogWarning( "failed to get text for revid " . $rev->rev_id . "\n" );
-				return $headers;
-			} else {
-				throw $ex;
-			}
-		}
+		$text = $this->getText( $rev );
 		$secs = preg_split(
 			'/(^=+.+?=+|^<h[1-6].*?' . '>.*?<\/h[1-6].*?' . '>)(?!\S)/mi',
 			$text, -1,
