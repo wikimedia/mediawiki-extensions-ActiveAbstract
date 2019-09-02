@@ -99,9 +99,9 @@ class AbstractFilter {
 	 */
 	private function variant( $text ) {
 		if ( $this->variant ) {
-			global $wgContLang;
+			$contLang = MediaWikiServices::getInstance()->getContentLanguage();
 
-			return $wgContLang->mConverter->translate( $text, $this->variant );
+			return $contLang->mConverter->translate( $text, $this->variant );
 		} else {
 			return $text;
 		}
@@ -188,11 +188,11 @@ class AbstractFilter {
 	 * @return string
 	 */
 	protected function stripMarkup( $text ) {
-		global $wgContLang;
+		$contLang = MediaWikiServices::getInstance()->getContentLanguage();
 
 		$text = substr( $text, 0, 4096 ); // don't bother with long text...
 
-		$image = preg_quote( $wgContLang->getNsText( NS_FILE ), '#' );
+		$image = preg_quote( $contLang->getNsText( NS_FILE ), '#' );
 		$text = str_replace( "'''", "", $text );
 		$text = str_replace( "''", "", $text );
 		// HTML-style comments
