@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Railfail536"
+			"Railfail536",
+			"Rail"
 		]
 	},
 	"activeabstract-desc": "Generuje kanał XML dla projektu Active Abstracts firmy Yahoo"
