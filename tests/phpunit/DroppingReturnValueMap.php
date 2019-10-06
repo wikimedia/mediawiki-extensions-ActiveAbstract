@@ -1,5 +1,9 @@
 <?php
 
+use PHPUnit\Framework\ExpectationFailedException;
+use PHPUnit\Framework\MockObject\Invocation;
+use PHPUnit\Framework\MockObject\Stub;
+
 /**
  * An Stub implementation taking return values from an array while removing
  * used parameter/return-value entries therefrom.
@@ -37,10 +41,10 @@
  *
  *
  * The implementation of DroppingReturnValueMap is based off of
- * PHPUnit_Framework_MockObject_Stub_ReturnValueMap from PHPUnit_MockObject by
- * Sebastian Bergmann (under the 3-clause-BSD licence).
+ * PHPUnit's ReturnValueMap by Sebastian Bergmann
+ * (under the 3-clause-BSD licence).
  */
-class DroppingReturnValueMap implements PHPUnit_Framework_MockObject_Stub {
+class DroppingReturnValueMap implements Stub {
 	protected $valueMap;
 
 	/** @inheritDoc */
@@ -49,7 +53,7 @@ class DroppingReturnValueMap implements PHPUnit_Framework_MockObject_Stub {
 	}
 
 	/** @inheritDoc */
-	public function invoke( PHPUnit_Framework_MockObject_Invocation $invocation ) {
+	public function invoke( Invocation $invocation ) {
 		if ( isset( $invocation->parameters ) ) {
 			// $invocation->parameters is only public in PHPUnit < 6
 			$parameters = $invocation->parameters;
@@ -91,7 +95,7 @@ class DroppingReturnValueMap implements PHPUnit_Framework_MockObject_Stub {
 		}
 		$actual .= ")";
 
-		throw new PHPUnit_Framework_ExpectationFailedException( "Map for DroppingReturnValueMap "
+		throw new ExpectationFailedException( "Map for DroppingReturnValueMap "
 			. "does not (or no longer) hold an entry for the actual parameters $actual" );
 	}
 
