@@ -141,7 +141,7 @@ Link to Page7 as Category [[Category:BackupDumperAbstractsTestPage7]].
 		}
 	}
 
-	protected function setUp() {
+	protected function setUp() : void {
 		parent::setUp();
 
 		// Since we will restrict dumping by page ranges (to allow
