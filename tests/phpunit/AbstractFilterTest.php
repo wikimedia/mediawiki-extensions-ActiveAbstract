@@ -23,7 +23,7 @@ class AbstractFilterTest extends DumpTestCase {
 			[ 'noredirect', 'NoredirectFilter', null ]
 		];
 
-		$dumperMock = $this->getMock( 'BackupDumper', [], [], '', false );
+		$dumperMock = $this->createMock( BackupDumper::class );
 
 		$dumperMock->expects( $this->exactly( count( $map ) ) )
 			->method( 'registerFilter' )
@@ -47,7 +47,7 @@ class AbstractFilterTest extends DumpTestCase {
 	}
 
 	public function testWriteOpenStreamNull() {
-		$sinkMock = $this->getMock( 'DumpOutput' );
+		$sinkMock = $this->createMock( DumpOutput::class );
 
 		$sinkMock->expects( $this->exactly( 1 ) )
 			->method( 'writeOpenStream' )
@@ -77,7 +77,7 @@ class AbstractFilterTest extends DumpTestCase {
 	}
 
 	public function testWriteOpenStreamEmptyString() {
-		$sinkMock = $this->getMock( 'DumpOutput' );
+		$sinkMock = $this->createMock( DumpOutput::class );
 
 		$sinkMock->expects( $this->exactly( 1 ) )
 			->method( 'writeOpenStream' )
@@ -107,7 +107,7 @@ class AbstractFilterTest extends DumpTestCase {
 	}
 
 	public function testWriteOpenStreamText() {
-		$sinkMock = $this->getMock( 'DumpOutput' );
+		$sinkMock = $this->createMock( DumpOutput::class );
 
 		$sinkMock->expects( $this->exactly( 1 ) )
 			->method( 'writeOpenStream' )
@@ -137,7 +137,7 @@ class AbstractFilterTest extends DumpTestCase {
 	}
 
 	public function testWriteCloseStreamNull() {
-		$sinkMock = $this->getMock( 'DumpOutput' );
+		$sinkMock = $this->createMock( DumpOutput::class );
 
 		$sinkMock->expects( $this->exactly( 1 ) )
 			->method( 'writeCloseStream' )
@@ -167,7 +167,7 @@ class AbstractFilterTest extends DumpTestCase {
 	}
 
 	public function testWriteCloseStreamEmptyString() {
-		$sinkMock = $this->getMock( 'DumpOutput' );
+		$sinkMock = $this->createMock( DumpOutput::class );
 
 		$sinkMock->expects( $this->exactly( 1 ) )
 			->method( 'writeCloseStream' )
@@ -197,7 +197,7 @@ class AbstractFilterTest extends DumpTestCase {
 	}
 
 	public function testWriteCloseStreamText() {
-		$sinkMock = $this->getMock( 'DumpOutput' );
+		$sinkMock = $this->createMock( DumpOutput::class );
 
 		$sinkMock->expects( $this->exactly( 1 ) )
 			->method( 'writeCloseStream' )
@@ -227,7 +227,7 @@ class AbstractFilterTest extends DumpTestCase {
 	}
 
 	public function testWriteRevision() {
-		$sinkMock = $this->getMock( 'DumpOutput' );
+		$sinkMock = $this->createMock( DumpOutput::class );
 
 		// No output of any kind is expected, as the filter outputs only the most current
 		// revision, and can detect the most recent only only after all revisions have been
