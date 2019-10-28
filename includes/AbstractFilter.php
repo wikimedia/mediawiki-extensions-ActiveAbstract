@@ -306,7 +306,7 @@ class AbstractFilter {
 	 * @todo FIXME check for explicit __NOTOC__
 	 */
 	protected function sectionLinks( $rev ) {
-		global $wgParser;
+		$parser = MediaWikiServices::getInstance()->getParser();
 
 		$headers = [];
 
@@ -322,7 +322,7 @@ class AbstractFilter {
 			$inside = preg_replace( '/^=+\s*(.*?)\s*=+/', '$1', $secs[$i] );
 			$stripped = $this->stripMarkup( $inside ); // strip internal markup and <h[1-6]>
 			$header = Validator::cleanUp( $stripped );
-			$anchor = $wgParser->guessSectionNameFromWikiText( $header );
+			$anchor = $parser->guessSectionNameFromWikiText( $header );
 			$url = $this->title->getCanonicalUrl() . $anchor;
 			$headers[$header] = $url;
 		}
