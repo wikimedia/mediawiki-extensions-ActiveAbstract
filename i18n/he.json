@@ -1,8 +1,9 @@
 {
 	"@metadata": {
 		"authors": [
-			"Guycn2"
+			"Guycn2",
+			"Amire80"
 		]
 	},
-	"activeabstract-desc": "קבלת הזנת XML עבור הפרויקט Active Abstracts של Yahoo"
+	"activeabstract-desc": "יצירת הזנת XML עבור הפרויקט Active Abstracts של Yahoo"
 }
