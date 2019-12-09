@@ -29,7 +29,7 @@ class AbstractFilter {
 	/** @var ExportProgressFilter */
 	protected $sink;
 
-	/** @var string|null */
+	/** @var string|false */
 	private $variant;
 
 	/** @var Title|null */
