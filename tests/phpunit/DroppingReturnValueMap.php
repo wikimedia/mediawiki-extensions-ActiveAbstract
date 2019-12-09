@@ -100,7 +100,7 @@ class DroppingReturnValueMap implements Stub {
 	}
 
 	/** @inheritDoc */
-	public function toString() {
+	public function toString() : string {
 		return 'dropping return value from a map';
 	}
 }
