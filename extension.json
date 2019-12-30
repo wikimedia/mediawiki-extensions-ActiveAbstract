@@ -17,9 +17,11 @@
 	},
 	"AutoloadClasses": {
 		"AbstractFilter": "includes/AbstractFilter.php",
-		"DroppingReturnValueMap": "tests/phpunit/DroppingReturnValueMap.php",
 		"NoredirectFilter": "includes/NoredirectFilter.php",
 		"GoogleCoopFilter": "includes/GoogleCoopFilter.php"
+	},
+	"TestAutoloadClasses": {
+		"DroppingReturnValueMap": "tests/phpunit/DroppingReturnValueMap.php"
 	},
 	"manifest_version": 1
 }
