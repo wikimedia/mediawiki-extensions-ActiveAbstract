@@ -290,16 +290,14 @@ class AbstractFilter {
 			return $matches[1];
 		}
 
-		// Just return the first line
-		$lines = explode( "\n", $text );
-
-		return trim( $lines[0] );
+		$firstLine = explode( "\n", $text, 2 )[0];
+		return trim( $firstLine );
 	}
 
 	/**
 	 * Extract a list of TOC links
 	 * @param stdClass $rev Database row with revision data
-	 * @return array of URL strings, indexed by name/title
+	 * @return string[] List of URL strings, indexed by name/title
 	 *
 	 * @todo FIXME extract TOC items properly
 	 * @todo FIXME check for explicit __NOTOC__
@@ -332,7 +330,7 @@ class AbstractFilter {
 	/**
 	 * Fetch the list of category links for this page
 	 * @param stdClass $rev Database row with revision data
-	 * @return array of URL strings, indexed by category name
+	 * @return string[] List of URL strings, indexed by category name
 	 */
 	protected function categoryLinks( $rev ) {
 		$id = $rev->page_id;
