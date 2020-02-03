@@ -27,23 +27,9 @@ class AbstractFilterTest extends DumpTestCase {
 
 		$dumperMock->expects( $this->exactly( count( $map ) ) )
 			->method( 'registerFilter' )
-			->will( $this->droppingReturnValueMap( $map ) );
+			->willReturnOnConsecutiveCalls( $map );
 
 		AbstractFilter::register( $dumperMock );
-	}
-
-	/**
-	 * obtains a stub implementation that allows to map parameters to values
-	 * and retract the parameters after usage.
-	 *
-	 * @param $valueMap array Mapping between parameters and return values. The
-	 *              documentation of DroppingReturnValueMap provides an example.
-	 * @return DroppingReturnValueMap
-	 *
-	 * @see DroppingReturnValueMap
-	 */
-	private function droppingReturnValueMap( $valueMap ) {
-		return new DroppingReturnValueMap( $valueMap );
 	}
 
 	public function testWriteOpenStreamNull() {
