@@ -19,8 +19,8 @@ class AbstractFilterTest extends DumpTestCase {
 
 	public function testRegister() {
 		$map = [
-			[ 'abstract', 'AbstractFilter', null ],
-			[ 'noredirect', 'NoredirectFilter', null ]
+			[ 'abstract', AbstractFilter::class, null ],
+			[ 'noredirect', NoredirectFilter::class, null ]
 		];
 
 		$dumperMock = $this->createMock( BackupDumper::class );

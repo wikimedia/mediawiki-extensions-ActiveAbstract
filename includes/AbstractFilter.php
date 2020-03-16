@@ -58,8 +58,8 @@ class AbstractFilter {
 	 * @param BackupDumper $dumper
 	 */
 	public static function register( $dumper ) {
-		$dumper->registerFilter( 'abstract', 'AbstractFilter' );
-		$dumper->registerFilter( 'noredirect', 'NoredirectFilter' );
+		$dumper->registerFilter( 'abstract', self::class );
+		$dumper->registerFilter( 'noredirect', NoredirectFilter::class );
 	}
 
 	/**
