@@ -93,7 +93,15 @@ Second paragraph in subsection 2.1.1.1.
 			list( $this->revId3_2, $this->textId3_2 ) = $this->addRevision( $page,
 				"BackupDumperAbstractsTestPage3Text2", "BackupDumperAbstractsTestPage2Summary2" );
 			$this->pageId3 = $page->getId();
-			$page->doDeleteArticle( "Testing ;)" );
+
+			if ( version_compare( MW_VERSION, '1.35', '<' ) ) {
+				$page->doDeleteArticle( "Testing ;)" );
+			} else {
+				$page->doDeleteArticleReal(
+					"Testing ;)",
+					$this->getTestSysop()->getUser()
+				);
+			}
 
 			// Page in different namespace
 			$title = Title::newFromText( 'BackupDumperAbstractsTestPage1', NS_TALK );
