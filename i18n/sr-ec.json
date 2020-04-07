@@ -1,9 +1,9 @@
 {
 	"@metadata": {
 		"authors": [
-			"Obsuser",
 			"Acamicamacaraca",
-			"BadDog"
+			"BadDog",
+			"Obsuser"
 		]
 	},
 	"activeabstract-desc": "Генерисање XML фида за Yahoo's Active Abstracts пројекат"
