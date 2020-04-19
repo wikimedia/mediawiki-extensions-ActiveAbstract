@@ -46,7 +46,7 @@ class AbstractFilter {
 		$this->sink =& $sink;
 
 		$bits = explode( '=', $params, 2 );
-		if ( count( $bits ) == 2 && $bits[0] == 'variant' ) {
+		if ( count( $bits ) === 2 && $bits[0] === 'variant' ) {
 			$this->variant = $bits[1];
 		} else {
 			$this->variant = false;
@@ -102,12 +102,13 @@ class AbstractFilter {
 	 */
 	private function variant( $text ) {
 		if ( $this->variant ) {
-			$contLang = MediaWikiServices::getInstance()->getContentLanguage();
-
-			return $contLang->mConverter->translate( $text, $this->variant );
-		} else {
-			return $text;
+			return MediaWikiServices::getInstance()
+				->getContentLanguage()
+				->getConverter()
+				->translate( $text, $this->variant );
 		}
+
+		return $text;
 	}
 
 	/**
@@ -188,8 +189,7 @@ class AbstractFilter {
 			}
 
 			// TODO: cache this!
-			$text = $content->getText();
-			return $text;
+			return $content->getText();
 		} catch ( MWException $ex ) {
 			// fall through
 		} catch ( RevisionAccessException $ex ) {
@@ -232,8 +232,7 @@ class AbstractFilter {
 		$text = substr( $text, 0, 4096 ); // don't bother with long text...
 
 		$image = preg_quote( $contLang->getNsText( NS_FILE ), '#' );
-		$text = str_replace( "'''", "", $text );
-		$text = str_replace( "''", "", $text );
+		$text = str_replace( [ "'''", "''" ], "", $text );
 		// HTML-style comments
 		$text = preg_replace( '#<!--.*?-->#s', '', $text );
 		// HTML-style tags
@@ -289,12 +288,12 @@ class AbstractFilter {
 
 		if ( preg_match( $firsttwo, $text, $matches ) ) {
 			return $matches[1];
-		} else {
-			// Just return the first line
-			$lines = explode( "\n", $text );
-
-			return trim( $lines[0] );
 		}
+
+		// Just return the first line
+		$lines = explode( "\n", $text );
+
+		return trim( $lines[0] );
 	}
 
 	/**
