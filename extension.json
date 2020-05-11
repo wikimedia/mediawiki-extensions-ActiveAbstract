@@ -20,5 +20,5 @@
 		"NoredirectFilter": "includes/NoredirectFilter.php",
 		"GoogleCoopFilter": "includes/GoogleCoopFilter.php"
 	},
-	"manifest_version": 1
+	"manifest_version": 2
 }
