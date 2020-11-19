@@ -16,9 +16,7 @@
  */
 
 use MediaWiki\MediaWikiServices;
-use MediaWiki\Revision\RevisionAccessException;
 use MediaWiki\Revision\SlotRecord;
-use MediaWiki\Storage\BlobAccessException;
 use UtfNormal\Validator;
 
 /**
@@ -190,15 +188,7 @@ class AbstractFilter {
 
 			// TODO: cache this!
 			return $content->getText();
-		} catch ( MWException $ex ) {
-			// fall through
-		} catch ( RevisionAccessException $ex ) {
-			// fall through
-		} catch ( BlobAccessException $ex ) {
-			// fall through
-		} catch ( RuntimeException $ex ) {
-			// fall through
-		} catch ( InvalidArgumentException $ex ) {
+		} catch ( MWException | RuntimeException | InvalidArgumentException $ex ) {
 			// fall through
 		}
 
