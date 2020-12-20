@@ -14,16 +14,20 @@ use MediaWiki\Tests\Maintenance\DumpTestCase;
  * @coversNothing
  */
 class BackupDumperAbstractsTest extends DumpTestCase {
-	// We'll add several pages, revision and texts. The following variables hold the
-	// corresponding ids.
-	private $pageId1, $pageId2, $pageId3, $pageId4, $pageId5, $pageId6, $pageId7;
-	private $revId1_1, $textId1_1;
-	private $revId2_1, $textId2_1, $revId2_2, $textId2_2;
-	private $revId3_1, $textId3_1, $revId3_2, $textId3_2;
-	private $revId4_1, $textId4_1;
-	private $revId5_1, $textId5_1;
-	private $revId6_1, $textId6_1;
-	private $revId7_1, $textId7_1;
+	/** @var int */
+	private $pageId1;
+	/** @var int */
+	private $pageId2;
+	/** @var int */
+	private $pageId3;
+	/** @var int */
+	private $pageId4;
+	/** @var int */
+	private $pageId5;
+	/** @var int */
+	private $pageId6;
+	/** @var int */
+	private $pageId7;
 
 	public function addDBData() {
 		$this->tablesUsed[] = 'page';
@@ -36,7 +40,7 @@ class BackupDumperAbstractsTest extends DumpTestCase {
 			// Page 6 below)
 			$title = Title::newFromText( 'BackupDumperAbstractsTestPage1' );
 			$page = WikiPage::factory( $title );
-			list( $this->revId1_1, $this->textId1_1 ) = $this->addRevision( $page,
+			$this->addRevision( $page,
 				"BackupDumperAbstractsTestPage1Text1
 
 =Subsection 1=",
@@ -46,10 +50,10 @@ class BackupDumperAbstractsTest extends DumpTestCase {
 			// Page with more than one revision and more subsections
 			$title = Title::newFromText( 'BackupDumperAbstractsTestPage2' );
 			$page = WikiPage::factory( $title );
-			list( $this->revId2_1, $this->textId2_1 ) = $this->addRevision( $page,
+			$this->addRevision( $page,
 				"BackupDumperAbstractsTestPage2Text1",
 				"BackupDumperAbstractsTestPage2Summary1" );
-			list( $this->revId2_2, $this->textId2_2 ) = $this->addRevision( $page,
+			$this->addRevision( $page,
 				"A short first paragraph.
 
 A second paragraph.
@@ -88,9 +92,9 @@ Second paragraph in subsection 2.1.1.1.
 			// Deleted Page
 			$title = Title::newFromText( 'BackupDumperAbstractsTestPage3' );
 			$page = WikiPage::factory( $title );
-			list( $this->revId3_1, $this->textId3_1 ) = $this->addRevision( $page,
+			$this->addRevision( $page,
 				"BackupDumperAbstractsTestPage3Text1", "BackupDumperAbstractsTestPage2Summary1" );
-			list( $this->revId3_2, $this->textId3_2 ) = $this->addRevision( $page,
+			$this->addRevision( $page,
 				"BackupDumperAbstractsTestPage3Text2", "BackupDumperAbstractsTestPage2Summary2" );
 			$this->pageId3 = $page->getId();
 
@@ -102,7 +106,7 @@ Second paragraph in subsection 2.1.1.1.
 			// Page in different namespace
 			$title = Title::newFromText( 'BackupDumperAbstractsTestPage1', NS_TALK );
 			$page = WikiPage::factory( $title );
-			list( $this->revId4_1, $this->textId4_1 ) = $this->addRevision( $page,
+			$this->addRevision( $page,
 				"Talk about BackupDumperAbstractsTestPage1 Text1
 
 Second paragraph",
@@ -112,7 +116,7 @@ Second paragraph",
 			// Redirecting page
 			$title = Title::newFromText( 'BackupDumperAbstractsTestPage5' );
 			$page = WikiPage::factory( $title );
-			list( $this->revId5_1, $this->textId5_1 ) = $this->addRevision( $page,
+			$this->addRevision( $page,
 				"#REDIRECT [[Page1]]",
 				"BackupDumperAbstractsTestPage5Summary1" );
 			$this->pageId5 = $page->getId();
@@ -120,7 +124,7 @@ Second paragraph",
 			// Page without subsections
 			$title = Title::newFromText( 'BackupDumperAbstractsTestPage6' );
 			$page = WikiPage::factory( $title );
-			list( $this->revId6_1, $this->textId6_1 ) = $this->addRevision( $page,
+			$this->addRevision( $page,
 				"BackupDumperAbstractsTestPage6Text1",
 				"BackupDumperAbstractsTestPage6Summary1" );
 			$this->pageId6 = $page->getId();
@@ -128,7 +132,7 @@ Second paragraph",
 			// Page with category links
 			$title = Title::newFromText( 'BackupDumperAbstractsTestPage7' );
 			$page = WikiPage::factory( $title );
-			list( $this->revId7_1, $this->textId7_1 ) = $this->addRevision( $page,
+			$this->addRevision( $page,
 				"BackupDumperAbstractsTestPage7Text1
 
 Link to Page1 as Category [[Category:BackupDumperAbstractsTestPage1]].
