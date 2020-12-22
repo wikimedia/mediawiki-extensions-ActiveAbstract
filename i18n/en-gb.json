@@ -1,8 +1,9 @@
 {
 	"@metadata": {
 		"authors": [
+			"Alefar",
 			"Andibing"
 		]
 	},
-	"activeabstract-desc": "Generate XML feed for Yahoo's Active Abstracts project"
+	"activeabstract-desc": "Generate XML feed for Yahoo!'s Active Abstracts project"
 }
