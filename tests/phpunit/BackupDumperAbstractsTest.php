@@ -229,7 +229,7 @@ Link to Page7 as Category [[Category:BackupDumperAbstractsTestPage7]].
 	 *
 	 * A opening feed tag is asserted and skipped over.
 	 *
-	 * @param $fname string: name of file to analyze
+	 * @param string $fname name of file to analyze
 	 */
 	private function assertFeedStart( $fname ) {
 		$this->assertDumpStart( $fname, false );
@@ -246,9 +246,9 @@ Link to Page7 as Category [[Category:BackupDumperAbstractsTestPage7]].
 	 * title, url, and abstract tags and also the opening links element. Hence, after
 	 * this function, the xml reader is at the first link element of the doc.
 	 *
-	 * @param $title string: title of the doc
-	 * @param $abstract string: abstract of the doc
-	 * @param $ns int: (optional) namespace for the title
+	 * @param string $title title of the doc
+	 * @param string $abstract abstract of the doc
+	 * @param int $ns namespace for the title
 	 */
 	private function assertDocStart( $title, $abstract, $ns = NS_MAIN ) {
 		global $wgSitename;
@@ -271,8 +271,8 @@ Link to Page7 as Category [[Category:BackupDumperAbstractsTestPage7]].
 	/**
 	 * Asserts that the xml reader is at a link element and skips over it, while analyzing it.
 	 *
-	 * @param $name string: name of the link
-	 * @param $is_category bool: (optional) Whether or not the link is a link to a category.
+	 * @param string $name name of the link
+	 * @param bool $is_category Whether or not the link is a link to a category.
 	 *             If true, $name is the categories title without namespace. If false, $name
 	 *             is interpreted as name of a subsection within the current doc.
 	 */
