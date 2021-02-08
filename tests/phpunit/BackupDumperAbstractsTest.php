@@ -147,7 +147,7 @@ Link to Page7 as Category [[Category:BackupDumperAbstractsTestPage7]].
 
 	protected function setUp() : void {
 		parent::setUp();
-
+		$this->asserter = $this->getDumpAsserter();
 		// Since we will restrict dumping by page ranges (to allow
 		// working tests, even if the db gets prepopulated by a base
 		// class), we have to assert, that the page id are consecutively
@@ -232,10 +232,9 @@ Link to Page7 as Category [[Category:BackupDumperAbstractsTestPage7]].
 	 * @param string $fname name of file to analyze
 	 */
 	private function assertFeedStart( $fname ) {
-		$this->assertDumpStart( $fname, false );
-		$this->xml->read();
-		$this->assertNodeStart( "feed" );
-		$this->skipWhitespace();
+		$this->asserter->open( $fname );
+		$this->asserter->assertNodeStart( "feed" );
+		$this->asserter->skipWhitespace();
 	}
 
 	/**
@@ -252,20 +251,20 @@ Link to Page7 as Category [[Category:BackupDumperAbstractsTestPage7]].
 	 */
 	private function assertDocStart( $title, $abstract, $ns = NS_MAIN ) {
 		global $wgSitename;
-		$this->assertNodeStart( "doc" );
-		$this->skipWhitespace();
+		$this->asserter->assertNodeStart( "doc" );
+		$this->asserter->skipWhitespace();
 
 		$title = Title::makeTitle( $ns, $title );
 		$this->assertNotNull( $title, "Title generation for <doc> tag" );
-		$this->assertTextNode( "title", $wgSitename . ": " . $title->getPrefixedText() );
+		$this->asserter->assertTextNode( "title", $wgSitename . ": " . $title->getPrefixedText() );
 
 		$this->currentDocURL = $title->getCanonicalURL();
-		$this->assertTextNode( "url", $this->currentDocURL );
+		$this->asserter->assertTextNode( "url", $this->currentDocURL );
 
-		$this->assertTextNode( "abstract", $abstract );
+		$this->asserter->assertTextNode( "abstract", $abstract );
 
-		$this->assertNodeStart( "links" );
-		$this->skipWhitespace();
+		$this->asserter->assertNodeStart( "links" );
+		$this->asserter->skipWhitespace();
 	}
 
 	/**
@@ -277,20 +276,20 @@ Link to Page7 as Category [[Category:BackupDumperAbstractsTestPage7]].
 	 *             is interpreted as name of a subsection within the current doc.
 	 */
 	private function assertLink( $name, $is_category = false ) {
-		$this->assertNodeStart( "sublink" );
-		$this->skipWhitespace();
+		$this->asserter->assertNodeStart( "sublink" );
+		$this->asserter->skipWhitespace();
 
-		$this->assertTextNode( "anchor", $name );
+		$this->asserter->assertTextNode( "anchor", $name );
 		if ( $is_category ) {
 			$link = Title::makeTitle( NS_CATEGORY, $name );
-			$this->assertTextNode( "link", $link->getCanonicalURL() );
+			$this->asserter->assertTextNode( "link", $link->getCanonicalURL() );
 		} else {
-			$this->assertTextNode( "link", $this->currentDocURL . "#"
+			$this->asserter->assertTextNode( "link", $this->currentDocURL . "#"
 				. str_replace( [ ' ', '&' ], [ '_', '.26' ], $name ) );
 		}
 
-		$this->assertNodeEnd( "sublink" );
-		$this->skipWhitespace();
+		$this->asserter->assertNodeEnd( "sublink" );
+		$this->asserter->skipWhitespace();
 	}
 
 	/**
@@ -299,11 +298,11 @@ Link to Page7 as Category [[Category:BackupDumperAbstractsTestPage7]].
 	 * The function skips past closing links and doc elements.
 	 */
 	private function assertDocEnd() {
-		$this->assertNodeEnd( "links" );
-		$this->skipWhitespace();
+		$this->asserter->assertNodeEnd( "links" );
+		$this->asserter->skipWhitespace();
 
-		$this->assertNodeEnd( "doc" );
-		$this->skipWhitespace();
+		$this->asserter->assertNodeEnd( "doc" );
+		$this->asserter->skipWhitespace();
 	}
 
 	/**
@@ -311,7 +310,7 @@ Link to Page7 as Category [[Category:BackupDumperAbstractsTestPage7]].
 	 * closes the reader.
 	 */
 	private function assertFeedEnd() {
-		$this->assertDumpEnd( "feed" );
+		$this->asserter->assertDumpEnd( "feed" );
 	}
 
 	public function testXmlDumpsBackupUseCase() {
