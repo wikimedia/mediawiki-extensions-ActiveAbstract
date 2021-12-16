@@ -35,11 +35,13 @@ class BackupDumperAbstractsTest extends DumpTestCase {
 		$this->tablesUsed[] = 'text';
 
 		try {
+			$wikiPageFactory = $this->getServiceContainer()->getWikiPageFactory();
+
 			// Simple Page. With a section, to not trigger category checking,
 			// that requires a second connection to the same database (compare
 			// Page 6 below)
 			$title = Title::newFromText( 'BackupDumperAbstractsTestPage1' );
-			$page = WikiPage::factory( $title );
+			$page = $wikiPageFactory->newFromTitle( $title );
 			$this->addRevision( $page,
 				"BackupDumperAbstractsTestPage1Text1
 
@@ -49,7 +51,7 @@ class BackupDumperAbstractsTest extends DumpTestCase {
 
 			// Page with more than one revision and more subsections
 			$title = Title::newFromText( 'BackupDumperAbstractsTestPage2' );
-			$page = WikiPage::factory( $title );
+			$page = $wikiPageFactory->newFromTitle( $title );
 			$this->addRevision( $page,
 				"BackupDumperAbstractsTestPage2Text1",
 				"BackupDumperAbstractsTestPage2Summary1" );
@@ -91,7 +93,7 @@ Second paragraph in subsection 2.1.1.1.
 
 			// Deleted Page
 			$title = Title::newFromText( 'BackupDumperAbstractsTestPage3' );
-			$page = WikiPage::factory( $title );
+			$page = $wikiPageFactory->newFromTitle( $title );
 			$this->addRevision( $page,
 				"BackupDumperAbstractsTestPage3Text1", "BackupDumperAbstractsTestPage2Summary1" );
 			$this->addRevision( $page,
@@ -105,7 +107,7 @@ Second paragraph in subsection 2.1.1.1.
 
 			// Page in different namespace
 			$title = Title::newFromText( 'BackupDumperAbstractsTestPage1', NS_TALK );
-			$page = WikiPage::factory( $title );
+			$page = $wikiPageFactory->newFromTitle( $title );
 			$this->addRevision( $page,
 				"Talk about BackupDumperAbstractsTestPage1 Text1
 
@@ -115,7 +117,7 @@ Second paragraph",
 
 			// Redirecting page
 			$title = Title::newFromText( 'BackupDumperAbstractsTestPage5' );
-			$page = WikiPage::factory( $title );
+			$page = $wikiPageFactory->newFromTitle( $title );
 			$this->addRevision( $page,
 				"#REDIRECT [[Page1]]",
 				"BackupDumperAbstractsTestPage5Summary1" );
@@ -131,7 +133,7 @@ Second paragraph",
 
 			// Page with category links
 			$title = Title::newFromText( 'BackupDumperAbstractsTestPage7' );
-			$page = WikiPage::factory( $title );
+			$page = $wikiPageFactory->newFromTitle( $title );
 			$this->addRevision( $page,
 				"BackupDumperAbstractsTestPage7Text1
 
