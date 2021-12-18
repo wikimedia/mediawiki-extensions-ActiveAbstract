@@ -125,7 +125,7 @@ Second paragraph",
 
 			// Page without subsections
 			$title = Title::newFromText( 'BackupDumperAbstractsTestPage6' );
-			$page = WikiPage::factory( $title );
+			$page = $wikiPageFactory->newFromTitle( $title );
 			$this->addRevision( $page,
 				"BackupDumperAbstractsTestPage6Text1",
 				"BackupDumperAbstractsTestPage6Summary1" );
