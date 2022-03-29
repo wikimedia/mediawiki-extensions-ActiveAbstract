@@ -1,5 +1,7 @@
 <?php
 
+use MediaWiki\Extension\ActiveAbstract\AbstractFilter;
+use MediaWiki\Extension\ActiveAbstract\NoredirectFilter;
 use MediaWiki\Tests\Maintenance\DumpTestCase;
 
 /**
@@ -12,8 +14,8 @@ use MediaWiki\Tests\Maintenance\DumpTestCase;
  *
  * @group Database
  * @group Dump
- * @covers AbstractFilter
- * @covers NoredirectFilter
+ * @covers \MediaWiki\Extension\ActiveAbstract\AbstractFilter
+ * @covers \MediaWiki\Extension\ActiveAbstract\NoredirectFilter
  */
 class AbstractFilterTest extends DumpTestCase {
 

@@ -1,5 +1,13 @@
 <?php
 
+namespace MediaWiki\Extension\ActiveAbstract;
+
+use BackupDumper;
+use ExportProgressFilter;
+use stdClass;
+use Title;
+use Xml;
+
 /**
  * Dump filter for creation of a Google Coop 'Subscribed Links' file
  *
@@ -176,3 +184,5 @@ class GoogleCoopFilter extends AbstractFilter {
 		return $s;
 	}
 }
+
+class_alias( GoogleCoopFilter::class, 'GoogleCoopFilter' );

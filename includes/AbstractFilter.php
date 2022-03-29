@@ -15,9 +15,22 @@
  *   --filter=abstract:variant=zh-cn
  */
 
+namespace MediaWiki\Extension\ActiveAbstract;
+
+use BackupDumper;
+use Exception;
+use ExportProgressFilter;
+use InvalidArgumentException;
 use MediaWiki\MediaWikiServices;
 use MediaWiki\Revision\SlotRecord;
+use MWException;
+use RuntimeException;
+use Sanitizer;
+use stdClass;
+use TextContent;
+use Title;
 use UtfNormal\Validator;
+use Xml;
 
 /**
  * Tosses away the MediaWiki XML and generates new output
@@ -376,3 +389,5 @@ class AbstractFilter {
 		$this->revision = $rev;
 	}
 }
+
+class_alias( AbstractFilter::class, 'AbstractFilter' );

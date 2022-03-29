@@ -1,5 +1,10 @@
 <?php
 
+namespace MediaWiki\Extension\ActiveAbstract;
+
+use DumpFilter;
+use stdClass;
+
 class NoredirectFilter extends DumpFilter {
 	/**
 	 * @param stdClass $page
@@ -9,3 +14,5 @@ class NoredirectFilter extends DumpFilter {
 		return !$page->page_is_redirect;
 	}
 }
+
+class_alias( NoredirectFilter::class, 'NoredirectFilter' );

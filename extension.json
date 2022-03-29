@@ -18,7 +18,13 @@
 	"AutoloadClasses": {
 		"AbstractFilter": "includes/AbstractFilter.php",
 		"NoredirectFilter": "includes/NoredirectFilter.php",
-		"GoogleCoopFilter": "includes/GoogleCoopFilter.php"
+		"GoogleCoopFilter": "includes/GoogleCoopFilter.php",
+		"MediaWiki\\Extension\\ActiveAbstract\\AbstractFilter": "includes/AbstractFilter.php",
+		"MediaWiki\\Extension\\ActiveAbstract\\NoredirectFilter": "includes/NoredirectFilter.php",
+		"MediaWiki\\Extension\\ActiveAbstract\\GoogleCoopFilter": "includes/GoogleCoopFilter.php"
+	},
+	"AutoloadNamespaces": {
+		"MediaWiki\\Extension\\ActiveAbstract\\": "includes/"
 	},
 	"manifest_version": 2
 }
