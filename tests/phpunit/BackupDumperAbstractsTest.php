@@ -193,7 +193,8 @@ Link to Page7 as Category [[Category:BackupDumperAbstractsTestPage7]].
 			"--plugin=AbstractFilter",
 			"--output=file:" . $fname, "--filter=abstract" ] );
 		$dumper->startId = $this->pageId1;
-		$dumper->endId = $this->pageId4 + 1; // Not including the redirect page (db isolation)
+		// Not including the redirect page (db isolation)
+		$dumper->endId = $this->pageId4 + 1;
 		$dumper->reporting = false;
 		$dumper->setDb( $this->db );
 

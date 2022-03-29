@@ -206,7 +206,8 @@ class AbstractFilter {
 
 		$stripped = $this->stripMarkup( $text );
 		$extract = $this->extractStart( $stripped );
-		$clipped = substr( $extract, 0, 1024 ); // not too long pls
+		// not too long pls
+		$clipped = substr( $extract, 0, 1024 );
 
 		return Validator::cleanUp( $clipped );
 	}
@@ -219,7 +220,8 @@ class AbstractFilter {
 	protected function stripMarkup( $text ) {
 		$contLang = MediaWikiServices::getInstance()->getContentLanguage();
 
-		$text = substr( $text, 0, 4096 ); // don't bother with long text...
+		// don't bother with long text...
+		$text = substr( $text, 0, 4096 );
 
 		$image = preg_quote( $contLang->getNsText( NS_FILE ), '#' );
 		$text = str_replace( [ "'''", "''" ], "", $text );
@@ -263,10 +265,14 @@ class AbstractFilter {
 	 */
 	private function extractStart( $text ) {
 		$endchars = [
-			'.', '!', '?', // regular ASCII
-			'。', // full-width ideographic full-stop
-			'．', '！', '？', // double-width roman forms
-			'｡', // half-width ideographic full stop
+			// regular ASCII
+			'.', '!', '?',
+			// full-width ideographic full-stop
+			'。',
+			// double-width roman forms
+			'．', '！', '？',
+			// half-width ideographic full stop
+			'｡',
 		];
 
 		$endgroup = implode( '', array_map( 'preg_quote', $endchars ) );
@@ -307,7 +313,8 @@ class AbstractFilter {
 		$secsCount = count( $secs );
 		for ( $i = 1; $i < $secsCount; $i += 2 ) {
 			$inside = preg_replace( '/^=+\s*(.*?)\s*=+/', '$1', $secs[$i] );
-			$stripped = $this->stripMarkup( $inside ); // strip internal markup and <h[1-6]>
+			// strip internal markup and <h[1-6]>
+			$stripped = $this->stripMarkup( $inside );
 			$header = Validator::cleanUp( $stripped );
 			$anchor = $parser->guessSectionNameFromWikiText( $header );
 			$url = $this->title->getCanonicalUrl() . $anchor;
@@ -352,7 +359,8 @@ class AbstractFilter {
 	 * @return string XML fragment
 	 */
 	protected function formatLink( $url, $anchor, $type ) {
-		$maxUrlLength = 1024; // as defined in Yahoo's .xsd
+		// as defined in Yahoo's .xsd
+		$maxUrlLength = 1024;
 		return Xml::openElement( 'sublink', [ 'linktype' => $type ] ) .
 			Xml::element( 'anchor', null, $this->variant( $anchor ) ) .
 			Xml::element( 'link', null, substr( $url, 0, $maxUrlLength ) ) .
