@@ -1,4 +1,5 @@
 {
+	"name": "ActiveAbstract",
 	"private": true,
 	"scripts": {
 		"test": "grunt test"
