@@ -86,7 +86,7 @@ class GoogleCoopFilter extends AbstractFilter {
 		$n++;
 		$this->title = Title::makeTitle( $page->page_namespace, $page->page_title );
 
-		$xml = "  <ResultSpec id=\"mw${n}\">\n";
+		$xml = "  <ResultSpec id=\"mw{$n}\">\n";
 		$xml .= '    ' . Xml::element( 'Query', null, $this->title->getPrefixedText() ) . "\n";
 		$xml .= "    <Response>\n";
 		$xml .= '      ' . Xml::element( 'Output', [ 'name' => 'title' ],
