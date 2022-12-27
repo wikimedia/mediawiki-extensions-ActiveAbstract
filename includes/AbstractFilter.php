@@ -114,8 +114,8 @@ class AbstractFilter {
 	private function variant( $text ) {
 		if ( $this->variant ) {
 			return MediaWikiServices::getInstance()
-				->getContentLanguage()
-				->getConverter()
+				->getLanguageConverterFactory()
+				->getLanguageConverter()
 				->translate( $text, $this->variant );
 		}
 
