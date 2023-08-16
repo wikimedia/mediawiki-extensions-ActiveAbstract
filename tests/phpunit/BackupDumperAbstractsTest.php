@@ -1,6 +1,7 @@
 <?php
 
 use MediaWiki\Tests\Maintenance\DumpTestCase;
+use MediaWiki\Title\Title;
 
 /**
  * Tests for BackupDumper producing abstract dumps using Abstractfilter

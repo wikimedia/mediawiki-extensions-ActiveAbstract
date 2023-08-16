@@ -4,8 +4,8 @@ namespace MediaWiki\Extension\ActiveAbstract;
 
 use BackupDumper;
 use ExportProgressFilter;
+use MediaWiki\Title\Title;
 use stdClass;
-use Title;
 use Xml;
 
 /**

@@ -23,12 +23,12 @@ use ExportProgressFilter;
 use InvalidArgumentException;
 use MediaWiki\MediaWikiServices;
 use MediaWiki\Revision\SlotRecord;
+use MediaWiki\Title\Title;
 use MWException;
 use RuntimeException;
 use Sanitizer;
 use stdClass;
 use TextContent;
-use Title;
 use UtfNormal\Validator;
 use Xml;
 
