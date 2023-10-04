@@ -18,7 +18,6 @@
 namespace MediaWiki\Extension\ActiveAbstract;
 
 use BackupDumper;
-use Exception;
 use ExportProgressFilter;
 use InvalidArgumentException;
 use MediaWiki\MediaWikiServices;
@@ -134,15 +133,11 @@ class AbstractFilter {
 					$xml .= Xml::element( 'abstract', null,
 						$this->variant(
 							$this->extractAbstract( $this->revision ) ) ) . "\n";
-				} catch ( Exception $ex ) {
-					if ( $ex instanceof MWException || $ex instanceof RuntimeException ) {
-						$xml .= Xml::element( 'abstract', [ 'serialization-error' => '' ] ) . "\n";
-						wfLogWarning( "failed to get abstract content for page " .
-							$this->title->getPrefixedText() . " with id " .
-							$this->revision->rev_page . "\n" );
-					} else {
-						throw $ex;
-					}
+				} catch ( MWException | RuntimeException $ex ) {
+					$xml .= Xml::element( 'abstract', [ 'serialization-error' => '' ] ) . "\n";
+					wfLogWarning( "failed to get abstract content for page " .
+						$this->title->getPrefixedText() . " with id " .
+						$this->revision->rev_page . "\n" );
 				}
 			} else {
 				$xml .= Xml::element( 'abstract', [ 'not-applicable' => '' ] ) . "\n";
@@ -158,15 +153,11 @@ class AbstractFilter {
 				foreach ( $links as $anchor => $url ) {
 					$xml .= $this->formatLink( $url, $anchor, 'nav' );
 				}
-			} catch ( Exception $ex ) {
-				if ( $ex instanceof MWException || $ex instanceof RuntimeException ) {
-					wfLogWarning( "failed to get abstract links for page " .
-						$this->title->getPrefixedText() . " with id " .
-						$this->revision->rev_page . "\n" );
-					$links = [];
-				} else {
-					throw $ex;
-				}
+			} catch ( MWException | RuntimeException $ex ) {
+				wfLogWarning( "failed to get abstract links for page " .
+					$this->title->getPrefixedText() . " with id " .
+					$this->revision->rev_page . "\n" );
+				$links = [];
 			}
 			// @todo: image links
 
