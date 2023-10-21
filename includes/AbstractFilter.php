@@ -146,7 +146,7 @@ class AbstractFilter {
 
 			try {
 				$links = $this->sectionLinks( $this->revision );
-				if ( empty( $links ) ) {
+				if ( !$links ) {
 					// If no TOC, they want us to fall back to categories.
 					$links = $this->categoryLinks( $this->revision );
 				}
