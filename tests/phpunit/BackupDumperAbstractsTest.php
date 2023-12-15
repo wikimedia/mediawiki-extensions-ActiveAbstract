@@ -1,5 +1,6 @@
 <?php
 
+use MediaWiki\Tests\Maintenance\DumpAsserter;
 use MediaWiki\Tests\Maintenance\DumpTestCase;
 use MediaWiki\Title\Title;
 
@@ -29,6 +30,9 @@ class BackupDumperAbstractsTest extends DumpTestCase {
 	private $pageId6;
 	/** @var int */
 	private $pageId7;
+
+	/** @var DumpAsserter */
+	private $asserter;
 
 	public function addDBData() {
 		$this->tablesUsed[] = 'page';
