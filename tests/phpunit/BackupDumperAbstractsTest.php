@@ -35,10 +35,6 @@ class BackupDumperAbstractsTest extends DumpTestCase {
 	private $asserter;
 
 	public function addDBData() {
-		$this->tablesUsed[] = 'page';
-		$this->tablesUsed[] = 'revision';
-		$this->tablesUsed[] = 'text';
-
 		try {
 			$wikiPageFactory = $this->getServiceContainer()->getWikiPageFactory();
 
