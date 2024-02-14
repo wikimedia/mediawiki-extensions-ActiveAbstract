@@ -335,7 +335,7 @@ class AbstractFilter {
 	 */
 	protected function categoryLinks( $rev ) {
 		$id = $rev->page_id;
-		$dbr = wfGetDB( DB_REPLICA );
+		$dbr = MediaWikiServices::getInstance()->getConnectionProvider()->getReplicaDatabase();
 		$result = $dbr->select( 'categorylinks',
 			[ 'cl_to' ],
 			[ 'cl_from' => $id ],
