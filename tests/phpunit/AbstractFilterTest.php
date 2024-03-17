@@ -37,7 +37,7 @@ class AbstractFilterTest extends DumpTestCase {
 	public function testWriteOpenStreamNull() {
 		$sinkMock = $this->createMock( DumpOutput::class );
 
-		$sinkMock->expects( $this->exactly( 1 ) )
+		$sinkMock->expects( $this->once() )
 			->method( 'writeOpenStream' )
 			->with( $this->matchesRegularExpression( '@^[[:space:]]*<feed>[[:space:]]*$@' ) );
 
@@ -67,7 +67,7 @@ class AbstractFilterTest extends DumpTestCase {
 	public function testWriteOpenStreamEmptyString() {
 		$sinkMock = $this->createMock( DumpOutput::class );
 
-		$sinkMock->expects( $this->exactly( 1 ) )
+		$sinkMock->expects( $this->once() )
 			->method( 'writeOpenStream' )
 			->with( $this->matchesRegularExpression( '@^[[:space:]]*<feed>[[:space:]]*$@' ) );
 
@@ -97,7 +97,7 @@ class AbstractFilterTest extends DumpTestCase {
 	public function testWriteOpenStreamText() {
 		$sinkMock = $this->createMock( DumpOutput::class );
 
-		$sinkMock->expects( $this->exactly( 1 ) )
+		$sinkMock->expects( $this->once() )
 			->method( 'writeOpenStream' )
 			->with( $this->matchesRegularExpression( '@^[[:space:]]*<feed>[[:space:]]*$@' ) );
 
@@ -127,7 +127,7 @@ class AbstractFilterTest extends DumpTestCase {
 	public function testWriteCloseStreamNull() {
 		$sinkMock = $this->createMock( DumpOutput::class );
 
-		$sinkMock->expects( $this->exactly( 1 ) )
+		$sinkMock->expects( $this->once() )
 			->method( 'writeCloseStream' )
 			->with( $this->matchesRegularExpression( '@^[[:space:]]*</feed>[[:space:]]*$@' ) );
 
@@ -157,7 +157,7 @@ class AbstractFilterTest extends DumpTestCase {
 	public function testWriteCloseStreamEmptyString() {
 		$sinkMock = $this->createMock( DumpOutput::class );
 
-		$sinkMock->expects( $this->exactly( 1 ) )
+		$sinkMock->expects( $this->once() )
 			->method( 'writeCloseStream' )
 			->with( $this->matchesRegularExpression( '@^[[:space:]]*</feed>[[:space:]]*$@' ) );
 
@@ -187,7 +187,7 @@ class AbstractFilterTest extends DumpTestCase {
 	public function testWriteCloseStreamText() {
 		$sinkMock = $this->createMock( DumpOutput::class );
 
-		$sinkMock->expects( $this->exactly( 1 ) )
+		$sinkMock->expects( $this->once() )
 			->method( 'writeCloseStream' )
 			->with( $this->matchesRegularExpression( '@^[[:space:]]*</feed>[[:space:]]*$@' ) );
 
