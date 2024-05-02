@@ -336,10 +336,12 @@ class AbstractFilter {
 	protected function categoryLinks( $rev ) {
 		$id = $rev->page_id;
 		$dbr = MediaWikiServices::getInstance()->getConnectionProvider()->getReplicaDatabase();
-		$result = $dbr->select( 'categorylinks',
-			[ 'cl_to' ],
-			[ 'cl_from' => $id ],
-			__METHOD__ );
+		$result = $dbr->newSelectQueryBuilder()
+			->select( 'cl_to' )
+			->from( 'categorylinks' )
+			->where( [ 'cl_from' => $id ] )
+			->caller( __METHOD__ )
+			->fetchResultSet();
 
 		$links = [];
 		foreach ( $result as $row ) {
