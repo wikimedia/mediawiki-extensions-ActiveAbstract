@@ -2,11 +2,11 @@
 
 namespace MediaWiki\Extension\ActiveAbstract;
 
-use BackupDumper;
 use ExportProgressFilter;
+use MediaWiki\Maintenance\BackupDumper;
 use MediaWiki\Title\Title;
+use MediaWiki\Xml\Xml;
 use stdClass;
-use Xml;
 
 /**
  * Dump filter for creation of a Google Coop 'Subscribed Links' file

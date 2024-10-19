@@ -17,19 +17,19 @@
 
 namespace MediaWiki\Extension\ActiveAbstract;
 
-use BackupDumper;
 use ExportProgressFilter;
 use InvalidArgumentException;
+use MediaWiki\Content\TextContent;
+use MediaWiki\Maintenance\BackupDumper;
 use MediaWiki\MediaWikiServices;
 use MediaWiki\Parser\Sanitizer;
 use MediaWiki\Revision\SlotRecord;
 use MediaWiki\Title\Title;
+use MediaWiki\Xml\Xml;
 use MWException;
 use RuntimeException;
 use stdClass;
-use TextContent;
 use UtfNormal\Validator;
-use Xml;
 
 /**
  * Tosses away the MediaWiki XML and generates new output

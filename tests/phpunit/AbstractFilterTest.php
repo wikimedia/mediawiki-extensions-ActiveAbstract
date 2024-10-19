@@ -2,6 +2,7 @@
 
 use MediaWiki\Extension\ActiveAbstract\AbstractFilter;
 use MediaWiki\Extension\ActiveAbstract\NoredirectFilter;
+use MediaWiki\Maintenance\BackupDumper;
 use MediaWiki\Tests\Maintenance\DumpTestCase;
 
 /**
